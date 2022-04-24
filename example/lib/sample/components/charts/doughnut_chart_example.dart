@@ -1,3 +1,5 @@
+
+
 import 'dart:math';
 
 import 'package:bruno/bruno.dart';
@@ -11,9 +13,9 @@ class DoughnutChartExample extends StatefulWidget {
 }
 
 class DoughnutChartExampleState extends State<DoughnutChartExample> {
-  BrnDoughnutDataItem selectedItem;
+  BrnDoughnutDataItem? selectedItem;
 
-  List<BrnDoughnutDataItem> dataList = List();
+  List<BrnDoughnutDataItem> dataList = [];
   List<Color> preinstallColors = [
     Color(0xffFF862D),
     Color(0xff26BB7D),
@@ -27,7 +29,9 @@ class DoughnutChartExampleState extends State<DoughnutChartExample> {
     super.initState();
     for (int i = 0; i < count; i++) {
       dataList.add(BrnDoughnutDataItem(
-          title: '示例', value: random(1, 5).toDouble(), color: getColorWithIndex(i)));
+          title: '示例',
+          value: random(1, 5).toDouble(),
+          color: getColorWithIndex(i)));
     }
   }
 
@@ -55,13 +59,15 @@ class DoughnutChartExampleState extends State<DoughnutChartExample> {
             data: dataList,
             selectedItem: selectedItem,
             showTitleWhenSelected: true,
-            selectCallback: (BrnDoughnutDataItem selectedItem) {
+            selectCallback: (BrnDoughnutDataItem? selectedItem) {
               setState(() {
                 this.selectedItem = selectedItem;
               });
             },
           ),
-          DoughnutChartLegend(data: this.dataList, legendStyle: BrnDoughnutChartLegendStyle.wrap),
+          DoughnutChartLegend(
+              data: this.dataList,
+              legendStyle: BrnDoughnutChartLegendStyle.wrap),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[

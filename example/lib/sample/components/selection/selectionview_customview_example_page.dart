@@ -1,37 +1,42 @@
+
+
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 
 class SelectionViewCustomViewExamplePage extends StatefulWidget {
   final String _title;
-  final List<BrnSelectionEntity> _filters;
+  final List<BrnSelectionEntity>? _filters;
 
   SelectionViewCustomViewExamplePage(this._title, this._filters);
 
   @override
-  _SelectionViewExamplePageState createState() => _SelectionViewExamplePageState(_filters);
+  _SelectionViewExamplePageState createState() =>
+      _SelectionViewExamplePageState(_filters);
 }
 
-class _SelectionViewExamplePageState extends State<SelectionViewCustomViewExamplePage> {
-  List<BrnSelectionEntity> _filterData;
+class _SelectionViewExamplePageState
+    extends State<SelectionViewCustomViewExamplePage> {
+  List<BrnSelectionEntity>? _filterData;
 
   var selectionKey = GlobalKey();
   bool isCustomFilterViewShow = false;
-  OverlayEntry filterViewEntry;
+  OverlayEntry? filterViewEntry;
 
   /// 筛选组件的回调函数，用于把用户选中的参数回传给筛选组件，同意在 onSelectionChanged 回调处理。 参数在 customParams 中存储
   var _customHandleCallBack;
 
   /// controller  用于控制、刷新 筛选顶部 menu 的状态
-  BrnSelectionViewController _selectionViewController = BrnSelectionViewController();
+  BrnSelectionViewController _selectionViewController =
+      BrnSelectionViewController();
 
   /// 筛选实际选中的参数值，点击【重置】，但是没有点击确定，并不会重置该变量。
-  String _filterSelectedDate;
+  String? _filterSelectedDate;
 
   /// 用于监听 Calendar日期状态的 notifier
-  ValueNotifier<DateTime> _currentCalendarSelectedDate;
+  late ValueNotifier<DateTime?> _currentCalendarSelectedDate;
   String _dateForamt = 'yyyy-MM-dd HH:mm:ss';
 
-  _SelectionViewExamplePageState(List<BrnSelectionEntity> filters) {
+  _SelectionViewExamplePageState(List<BrnSelectionEntity>? filters) {
     _filterData = filters;
   }
 
@@ -58,14 +63,15 @@ class _SelectionViewExamplePageState extends State<SelectionViewCustomViewExampl
             BrnSelectionView(
               key: selectionKey,
               selectionViewController: _selectionViewController,
-              originalSelectionData: _filterData,
-              onCustomSelectionMenuClick: (int index, BrnSelectionEntity customMenuItem,
+              originalSelectionData: _filterData!,
+              onCustomSelectionMenuClick: (int index,
+                  BrnSelectionEntity customMenuItem,
                   BrnSetCustomSelectionParams customHandleCallBack) {
                 if (isCustomFilterViewShow) {
                   closeCustomFilterView();
                 } else {
                   filterViewEntry = getCustomFilterView();
-                  Overlay.of(context).insert(filterViewEntry);
+                  Overlay.of(context)!.insert(filterViewEntry!);
                   isCustomFilterViewShow = true;
                 }
                 _customHandleCallBack = customHandleCallBack;
@@ -75,12 +81,17 @@ class _SelectionViewExamplePageState extends State<SelectionViewCustomViewExampl
                   Map<String, String> customParams,
                   BrnSetCustomSelectionMenuTitle setCustomTitleFunction) {
                 BrnToast.show(
-                    'filterParams : $filterParams' + ',\n customParams : $customParams', context);
+                    'filterParams : $filterParams' +
+                        ',\n customParams : $customParams',
+                    context);
                 _filterSelectedDate = customParams['date'];
-                if (customParams?.isNotEmpty ?? false) {
-                  setCustomTitleFunction(menuTitle: customParams.values.first, isMenuTitleHighLight: true);
+                if (customParams.isNotEmpty) {
+                  setCustomTitleFunction(
+                      menuTitle: customParams.values.first,
+                      isMenuTitleHighLight: true);
                 } else {
-                  setCustomTitleFunction(menuTitle: '自定义事件选择', isMenuTitleHighLight: false);
+                  setCustomTitleFunction(
+                      menuTitle: '自定义事件选择', isMenuTitleHighLight: false);
                 }
               },
             ),
@@ -94,16 +105,20 @@ class _SelectionViewExamplePageState extends State<SelectionViewCustomViewExampl
   }
 
   OverlayEntry getCustomFilterView() {
-    final RenderBox selectionRenderBox = selectionKey.currentContext.findRenderObject();
-    var position = selectionRenderBox.localToGlobal(Offset.zero, ancestor: null);
+    final RenderBox selectionRenderBox =
+        selectionKey.currentContext!.findRenderObject() as RenderBox;
+    var position =
+        selectionRenderBox.localToGlobal(Offset.zero, ancestor: null);
     var size = selectionRenderBox.size;
     double topOffset = size.height + position.dy;
-    BrnSelectionListViewController controller = BrnSelectionListViewController();
+    BrnSelectionListViewController controller =
+        BrnSelectionListViewController();
     controller..listViewTop = topOffset;
     controller..screenHeight = MediaQuery.of(context).size.height;
 
-    _currentCalendarSelectedDate =
-        ValueNotifier(DateTimeFormatter.convertStringToDate(_dateForamt, _filterSelectedDate));
+    _currentCalendarSelectedDate = ValueNotifier(
+        DateTimeFormatter.convertStringToDate(
+            _dateForamt, _filterSelectedDate));
 
     var content = Column(children: [
       Flexible(
@@ -114,11 +129,11 @@ class _SelectionViewExamplePageState extends State<SelectionViewCustomViewExampl
             children: <Widget>[
               ValueListenableBuilder(
                 valueListenable: _currentCalendarSelectedDate,
-                builder: (context, value, widget) {
-                  return BrnCalendarView(
+                builder: (context, dynamic value, widget) {
+                  return BrnCalendarView.single(
                       initStartSelectedDate: _currentCalendarSelectedDate.value,
                       initEndSelectedDate: _currentCalendarSelectedDate.value,
-                      startEndDateChange: (_, __) {
+                      dateChange: (_) {
                         _currentCalendarSelectedDate.value = _;
                       });
                 },
@@ -141,7 +156,9 @@ class _SelectionViewExamplePageState extends State<SelectionViewCustomViewExampl
             top: topOffset,
           ),
           child: Stack(
-            children: <Widget>[BrnSelectionAnimationWidget(controller: controller, view: content)],
+            children: <Widget>[
+              BrnSelectionAnimationWidget(controller: controller, view: content)
+            ],
           ),
         ),
       );
@@ -164,7 +181,8 @@ class _SelectionViewExamplePageState extends State<SelectionViewCustomViewExampl
                   Container(
                     height: 24,
                     width: 24,
-                    child: BrunoTools.getAssetImage(BrnAsset.iconSelectionReset),
+                    child:
+                        BrunoTools.getAssetImage(BrnAsset.iconSelectionReset),
                   ),
                   Text(
                     '重置',
@@ -176,7 +194,6 @@ class _SelectionViewExamplePageState extends State<SelectionViewCustomViewExampl
             onTap: () {
               /// TODO  清除筛选
               _currentCalendarSelectedDate.value = null;
-              _currentCalendarSelectedDate.notifyListeners();
             },
           ),
           Expanded(
@@ -184,10 +201,14 @@ class _SelectionViewExamplePageState extends State<SelectionViewCustomViewExampl
               onTap: () {
                 /// 真正点击【确定】时，选中的参数才有意义
                 if (_customHandleCallBack != null)
-                  _customHandleCallBack(_currentCalendarSelectedDate.value == null
+                  _customHandleCallBack(_currentCalendarSelectedDate.value ==
+                          null
                       ? Map<String, String>()
-                      : {'date': _currentCalendarSelectedDate.value.toString() ?? ''});
-                _filterSelectedDate = _currentCalendarSelectedDate.value?.toString();
+                      : {
+                          'date': _currentCalendarSelectedDate.value.toString()
+                        });
+                _filterSelectedDate =
+                    _currentCalendarSelectedDate.value?.toString();
                 closeCustomFilterView();
               },
               title: '确定',
@@ -199,8 +220,8 @@ class _SelectionViewExamplePageState extends State<SelectionViewCustomViewExampl
   }
 
   void closeCustomFilterView() {
-    _selectionViewController?.closeSelectionView();
-    _selectionViewController?.refreshSelectionTitle();
+    _selectionViewController.closeSelectionView();
+    _selectionViewController.refreshSelectionTitle();
     filterViewEntry?.remove();
     filterViewEntry = null;
     isCustomFilterViewShow = false;

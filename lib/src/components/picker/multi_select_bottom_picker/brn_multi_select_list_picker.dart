@@ -1,3 +1,5 @@
+
+
 import 'package:bruno/src/components/line/brn_line.dart';
 import 'package:bruno/src/components/picker/base/brn_picker_constants.dart';
 import 'package:bruno/src/components/picker/base/brn_picker_title.dart';
@@ -22,19 +24,19 @@ typedef BrnMultiSelectListPickerItemClick = void Function(
 /// 多选列表 Picker
 
 class BrnMultiSelectListPicker extends StatefulWidget {
-  final String title;
+  final String? title;
   final List<BrnMultiSelectBottomPickerItem> items;
-  final BrnMultiSelectListPickerSubmit onSubmit;
-  final VoidCallback onCancel;
-  final BrnMultiSelectListPickerItemClick onItemClick;
+  final BrnMultiSelectListPickerSubmit? onSubmit;
+  final VoidCallback? onCancel;
+  final BrnMultiSelectListPickerItemClick? onItemClick;
   final BrnPickerTitleConfig pickerTitleConfig;
 
   static void show(
     BuildContext context, {
-    @required List<BrnMultiSelectBottomPickerItem> items,
-    BrnMultiSelectListPickerSubmit onSubmit,
-    VoidCallback onCancel,
-    BrnMultiSelectListPickerItemClick onItemClick,
+    required List<BrnMultiSelectBottomPickerItem> items,
+    BrnMultiSelectListPickerSubmit? onSubmit,
+    VoidCallback? onCancel,
+    BrnMultiSelectListPickerItemClick? onItemClick,
     BrnPickerTitleConfig pickerTitleConfig = BrnPickerTitleConfig.Default,
     bool isDismissible = true,
   }) {
@@ -55,9 +57,9 @@ class BrnMultiSelectListPicker extends StatefulWidget {
   }
 
   BrnMultiSelectListPicker({
-    Key key,
+    Key? key,
     this.title,
-    this.items,
+    required this.items,
     this.pickerTitleConfig = BrnPickerTitleConfig.Default,
     this.onSubmit,
     this.onCancel,
@@ -97,16 +99,15 @@ class MultiSelectDialogWidgetState extends State<BrnMultiSelectListPicker> {
                   child: BrnPickerTitle(
                     pickerTitleConfig: widget.pickerTitleConfig,
                     onConfirm: () {
-                      List<BrnMultiSelectBottomPickerItem> selectedItems =
-                          List();
+                      List<BrnMultiSelectBottomPickerItem> selectedItems = [];
                       if (widget.onSubmit != null) {
-                        for (int i = 0; i < widget.items?.length; i++) {
+                        for (int i = 0; i < widget.items.length; i++) {
                           if (widget.items[i].isChecked) {
                             selectedItems.add(widget.items[i]);
                           }
                         }
                         if (widget.onSubmit != null) {
-                          widget.onSubmit(selectedItems);
+                          widget.onSubmit!(selectedItems);
                         }
                       }
                     },
@@ -118,12 +119,12 @@ class MultiSelectDialogWidgetState extends State<BrnMultiSelectListPicker> {
                 ),
                 LimitedBox(
                     maxWidth: double.infinity,
-                    maxHeight: PICKER_HEIGHT,
+                    maxHeight: pickerHeight,
                     child: ListView.builder(
                         shrinkWrap: true,
                         itemBuilder: (context, index) =>
                             _buildItem(context, index),
-                        itemCount: widget.items?.length)),
+                        itemCount: widget.items.length)),
               ],
             ),
           ],
@@ -133,58 +134,54 @@ class MultiSelectDialogWidgetState extends State<BrnMultiSelectListPicker> {
   }
 
   Widget _buildItem(BuildContext context, int index) {
-    if (widget.items[index] == null) {
-      return Container();
-    } else {
-      return GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            setState(() {
-              widget.items[index].isChecked = !widget.items[index].isChecked;
-            });
-            if (widget.onItemClick != null) {
-              widget.onItemClick(context, index);
-            }
-          },
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                        child: Text(widget.items[index].content,
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: widget.items[index].isChecked
-                                    ? FontWeight.w600
-                                    : FontWeight.normal,
-                                color: widget.items[index].isChecked
-                                    ? BrnThemeConfigurator.instance
-                                        .getConfig()
-                                        .commonConfig
-                                        .brandPrimary
-                                    : BrnThemeConfigurator.instance
-                                        .getConfig()
-                                        .commonConfig
-                                        .colorTextBase))),
-                    Container(
-                        alignment: Alignment.center,
-                        height: 50,
-                        child: widget.items[index].isChecked
-                            ? BrunoTools.getAssetImageWithBandColor(
-                                BrnAsset.iconMultiSelected)
-                            : BrunoTools.getAssetImage(BrnAsset.iconUnSelect)),
-                  ],
-                ),
+    return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          setState(() {
+            widget.items[index].isChecked = !widget.items[index].isChecked;
+          });
+          if (widget.onItemClick != null) {
+            widget.onItemClick!(context, index);
+          }
+        },
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                      child: Text(widget.items[index].content,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: widget.items[index].isChecked
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
+                              color: widget.items[index].isChecked
+                                  ? BrnThemeConfigurator.instance
+                                      .getConfig()
+                                      .commonConfig
+                                      .brandPrimary
+                                  : BrnThemeConfigurator.instance
+                                      .getConfig()
+                                      .commonConfig
+                                      .colorTextBase))),
+                  Container(
+                      alignment: Alignment.center,
+                      height: 50,
+                      child: widget.items[index].isChecked
+                          ? BrunoTools.getAssetImageWithBandColor(
+                              BrnAsset.iconMultiSelected)
+                          : BrunoTools.getAssetImage(BrnAsset.iconUnSelect)),
+                ],
               ),
-              index != widget.items.length - 1
-                  ? Padding(
-                      padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                      child: BrnLine())
-                  : Container()
-            ],
-          ));
-    }
+            ),
+            index != widget.items.length - 1
+                ? Padding(
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: BrnLine())
+                : Container()
+          ],
+        ));
   }
 }

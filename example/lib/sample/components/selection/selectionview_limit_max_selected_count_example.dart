@@ -1,3 +1,5 @@
+
+
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 
@@ -8,13 +10,15 @@ class SelectionViewLimitMaxSelectedCountExamplePage extends StatefulWidget {
   SelectionViewLimitMaxSelectedCountExamplePage(this._title, this._filterData);
 
   @override
-  _SelectionViewExamplePageState createState() => _SelectionViewExamplePageState();
+  _SelectionViewExamplePageState createState() =>
+      _SelectionViewExamplePageState();
 }
 
-class _SelectionViewExamplePageState extends State<SelectionViewLimitMaxSelectedCountExamplePage> {
-  List<BrnSelectionEntity> items;
+class _SelectionViewExamplePageState
+    extends State<SelectionViewLimitMaxSelectedCountExamplePage> {
+  List<BrnSelectionEntity>? items;
 
-  BrnSelectionViewController controller;
+  BrnSelectionViewController? controller;
 
   @override
   void initState() {
@@ -41,7 +45,7 @@ class _SelectionViewExamplePageState extends State<SelectionViewLimitMaxSelected
             child: GestureDetector(
               child: Text("点击关闭弹窗"),
               onTap: () {
-                controller.closeSelectionView();
+                controller!.closeSelectionView();
               },
             ),
           ),
@@ -53,7 +57,9 @@ class _SelectionViewExamplePageState extends State<SelectionViewLimitMaxSelected
                 Map<String, String> customParams,
                 BrnSetCustomSelectionMenuTitle setCustomTitleFunction) {
               BrnToast.show(
-                  'filterParams : $filterParams' + ',\n customParams : $customParams', context);
+                  'filterParams : $filterParams' +
+                      ',\n customParams : $customParams',
+                  context);
             },
             onMenuClickInterceptor: (index) {
               if (index == 4) {
@@ -65,9 +71,9 @@ class _SelectionViewExamplePageState extends State<SelectionViewLimitMaxSelected
             },
             onSelectionPreShow: (int index, BrnSelectionEntity entity) {
               if (entity.key == "role" || entity.key == "guidePrice") {
-                return BrnSelectionWindowType.Range;
+                return BrnSelectionWindowType.range;
               }
-              return entity.filterShowType;
+              return entity.filterShowType!;
             },
           ),
           Container(

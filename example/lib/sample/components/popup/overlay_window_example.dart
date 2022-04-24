@@ -1,3 +1,5 @@
+
+
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 
@@ -11,9 +13,9 @@ class OverlayWindowExample extends StatefulWidget {
 }
 
 class OverlayWindowExamplePageState extends State<OverlayWindowExample> {
-  BrnOverlayController _overlayController;
-  var _focusNode = FocusNode();
-  var _searchBarKey = GlobalKey();
+  BrnOverlayController? _overlayController;
+  FocusNode _focusNode = FocusNode();
+  GlobalKey _searchBarKey = GlobalKey();
 
   @override
   void initState() {
@@ -46,8 +48,10 @@ class OverlayWindowExamplePageState extends State<OverlayWindowExample> {
         innerColor: Colors.white,
         hintText: "请输入小区名称",
         borderRadius: BorderRadius.all(Radius.circular(10)),
-        normalBorder: Border.all(color: Color(0xFF999999), width: 1, style: BorderStyle.solid),
-        activeBorder: Border.all(color: Color(0xFF0984F9), width: 1, style: BorderStyle.solid),
+        normalBorder: Border.all(
+            color: Color(0xFF999999), width: 1, style: BorderStyle.solid),
+        activeBorder: Border.all(
+            color: Color(0xFF0984F9), width: 1, style: BorderStyle.solid),
         focusNode: _focusNode,
         onTextClear: () {
           _focusNode.unfocus();
@@ -62,12 +66,14 @@ class OverlayWindowExamplePageState extends State<OverlayWindowExample> {
           _overlayController?.removeOverlay();
         },
         onTextChange: (text) {
-          if (text == null || text == '') {
+          if (text == '') {
             _overlayController?.removeOverlay();
             return;
           }
-          if (_overlayController == null || _overlayController.isOverlayShowing == false) {
-            _overlayController = BrnOverlayWindow.showOverlayWindow(context, _searchBarKey,
+          if (_overlayController == null ||
+              _overlayController!.isOverlayShowing == false) {
+            _overlayController = BrnOverlayWindow.showOverlayWindow(
+                context, _searchBarKey,
                 content: _sugListView(),
                 autoDismissOnTouchOutSide: true,
                 popDirection: BrnOverlayPopDirection.bottom);

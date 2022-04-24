@@ -1,3 +1,5 @@
+
+
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 
@@ -8,13 +10,15 @@ class FlatSelectionThreeTagsExample extends StatefulWidget {
   FlatSelectionThreeTagsExample(this._title, this._filterData);
 
   @override
-  _SelectionViewExamplePageState createState() => _SelectionViewExamplePageState();
+  _SelectionViewExamplePageState createState() =>
+      _SelectionViewExamplePageState();
 }
 
-class _SelectionViewExamplePageState extends State<FlatSelectionThreeTagsExample> {
-  BrnSelectionEntity entity;
+class _SelectionViewExamplePageState
+    extends State<FlatSelectionThreeTagsExample> {
+  BrnSelectionEntity? entity;
 
-  BrnFlatSelectionController controller;
+  BrnFlatSelectionController? controller;
 
   var selectionKey = GlobalKey();
 
@@ -29,7 +33,7 @@ class _SelectionViewExamplePageState extends State<FlatSelectionThreeTagsExample
 
   @override
   void dispose() {
-    controller.dispose();
+    controller!.dispose();
     controller = null;
     super.dispose();
   }
@@ -37,7 +41,7 @@ class _SelectionViewExamplePageState extends State<FlatSelectionThreeTagsExample
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget._title)),
+      appBar: BrnAppBar(title: widget._title),
       body: SingleChildScrollView(
           child: Column(
         children: <Widget>[
@@ -64,7 +68,8 @@ class _SelectionViewExamplePageState extends State<FlatSelectionThreeTagsExample
                             entityDataList: widget._filterData,
                             confirmCallback: (data) {
                               var str = "";
-                              data.forEach((k, v) => str = str + " " + '${k}: ${v}');
+                              data.forEach(
+                                  (k, v) => str = str + " " + '$k: $v');
                               BrnToast.show(str, context);
                             },
                             controller: controller)),
@@ -97,18 +102,20 @@ class _SelectionViewExamplePageState extends State<FlatSelectionThreeTagsExample
                       Container(
                         height: 24,
                         width: 24,
-                        child: BrunoTools.getAssetImage(BrnAsset.iconSelectionReset),
+                        child: BrunoTools.getAssetImage(
+                            BrnAsset.iconSelectionReset),
                       ),
                       Text(
                         "重置",
-                        style: TextStyle(fontSize: 11, color: Color(0xFF999999)),
+                        style:
+                            TextStyle(fontSize: 11, color: Color(0xFF999999)),
                       )
                     ],
                   ),
                 ),
                 onTap: () {
                   if (controller != null) {
-                    controller.resetSelectedOptions();
+                    controller!.resetSelectedOptions();
                   }
                 },
               ),
@@ -121,7 +128,7 @@ class _SelectionViewExamplePageState extends State<FlatSelectionThreeTagsExample
                       title: "取消",
                       onTap: () {
                         if (controller != null) {
-                          controller.cancelSelectedOptions();
+                          controller!.cancelSelectedOptions();
                           setState(() {
                             _isShow = false;
                           });
@@ -135,7 +142,7 @@ class _SelectionViewExamplePageState extends State<FlatSelectionThreeTagsExample
                       title: "确定",
                       onTap: () {
                         if (controller != null) {
-                          controller.confirmSelectedOptions();
+                          controller!.confirmSelectedOptions();
                           setState(() {
                             _isShow = false;
                           });
@@ -148,9 +155,5 @@ class _SelectionViewExamplePageState extends State<FlatSelectionThreeTagsExample
         )
       ],
     );
-  }
-
-  void _backButtonClickEvent() {
-    Navigator.of(context).pop();
   }
 }

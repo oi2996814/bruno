@@ -8,12 +8,12 @@ class BrnSelectionAnimationWidget extends StatefulWidget {
   final Widget view;
   final int animationMilliseconds;
 
-  const BrnSelectionAnimationWidget(
-      {Key key,
-      @required this.controller,
-      @required this.view,
-      this.animationMilliseconds = 100})
-      : super(key: key);
+  const BrnSelectionAnimationWidget({
+    Key? key,
+    required this.controller,
+    required this.view,
+    this.animationMilliseconds = 100,
+  }) : super(key: key);
 
   @override
   _BrnSelectionAnimationWidgetState createState() =>
@@ -24,22 +24,20 @@ class _BrnSelectionAnimationWidgetState
     extends State<BrnSelectionAnimationWidget>
     with SingleTickerProviderStateMixin {
   bool _isControllerDisposed = false;
-  Animation<double> _animation;
-  AnimationController _controller;
+  late AnimationController _animationController;
 
   @override
   void initState() {
     super.initState();
-
     widget.controller.addListener(_onController);
-    _controller = AnimationController(
+    _animationController = AnimationController(
         duration: Duration(milliseconds: widget.animationMilliseconds),
         vsync: this);
   }
 
   dispose() {
-    widget.controller?.removeListener(_onController);
-    _controller.dispose();
+    widget.controller.removeListener(_onController);
+    _animationController.dispose();
     _isControllerDisposed = true;
     super.dispose();
   }
@@ -50,30 +48,30 @@ class _BrnSelectionAnimationWidgetState
 
   @override
   Widget build(BuildContext context) {
-    _controller.duration = Duration(milliseconds: widget.animationMilliseconds);
+    _animationController.duration =
+        Duration(milliseconds: widget.animationMilliseconds);
     return _buildListViewWidget();
   }
 
   _showListViewWidget() {
-    if (widget.view == null) {
-      return;
-    }
-
-    _animation = Tween(
+    Animation<double> animation = Tween(
             begin: 0.0,
-            end: widget.controller.screenHeight - widget.controller.listViewTop)
-        .animate(_controller)
+            end: MediaQuery.of(context).size.height -
+                (widget.controller.listViewTop ?? 0))
+        .animate(_animationController)
           ..addListener(() {
             //这行如果不写，没有动画效果
             setState(() {});
           });
 
-    if (_isControllerDisposed) return;
+    if (_isControllerDisposed) {
+      return;
+    }
 
-    if (_animation.status == AnimationStatus.completed) {
-      _controller.reverse();
+    if (animation.status == AnimationStatus.completed) {
+      _animationController.reverse();
     } else {
-      _controller.forward();
+      _animationController.forward();
     }
   }
 
@@ -86,7 +84,7 @@ class _BrnSelectionAnimationWidgetState
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height -
-              widget.controller.listViewTop,
+              (widget.controller.listViewTop ?? 0),
           child: Padding(
             padding: EdgeInsets.all(0),
             child: widget.view,

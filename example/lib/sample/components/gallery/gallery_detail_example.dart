@@ -1,13 +1,16 @@
+
+
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 
 enum PhotoGalleryTheme { dark, light }
 
 class GalleryDetailExamplePage extends StatefulWidget {
-  final String title;
+  final String? title;
   final PhotoGalleryTheme photoGalleryTheme;
 
-  GalleryDetailExamplePage({this.title, this.photoGalleryTheme = PhotoGalleryTheme.dark});
+  GalleryDetailExamplePage(
+      {this.title, this.photoGalleryTheme = PhotoGalleryTheme.dark});
 
   @override
   State<StatefulWidget> createState() {
@@ -16,8 +19,8 @@ class GalleryDetailExamplePage extends StatefulWidget {
 }
 
 class GalleryDetailExamplePageState extends State<GalleryDetailExamplePage> {
-  List<BrnPhotoGroupConfig> allConfig;
-  BrnGalleryController controller;
+  late List<BrnPhotoGroupConfig> allConfig;
+  late BrnGalleryController controller;
 
   @override
   void initState() {
@@ -42,7 +45,8 @@ class GalleryDetailExamplePageState extends State<GalleryDetailExamplePage> {
             themeData: PhotoGalleryTheme.dark == widget.photoGalleryTheme
                 ? BrnGalleryDetailConfig.dark()
                 : BrnGalleryDetailConfig.light(),
-            url: "https://img1.baidu.com/it/u=2496571732,442429806&fm=26&fmt=auto&gp=0.jpg",
+            url:
+                "https://img1.baidu.com/it/u=2496571732,442429806&fm=26&fmt=auto&gp=0.jpg",
             showBottom: true,
             bottomCardModel: PhotoBottomCardState.cantFold,
             name: "一只猫",
@@ -171,8 +175,8 @@ class GalleryDetailExamplePageState extends State<GalleryDetailExamplePage> {
           BrnToast.show("点击了$i $j", context);
           // 移除第二组的最后一个配置，跳转到 第二组的第一张图
           if (allConfig.length > 1) {
-            if (allConfig[1].configList.length > 0) {
-              allConfig[1].configList.removeLast();
+            if (allConfig[1].configList!.length > 0) {
+              allConfig[1].configList!.removeLast();
               controller.refresh(1, 0);
             } else {
               allConfig.removeAt(1);

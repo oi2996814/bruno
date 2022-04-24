@@ -1,3 +1,5 @@
+
+
 import 'package:bruno/bruno.dart';
 import 'package:example/sample/components/form/group_example/expansion_group_example.dart';
 import 'package:example/sample/components/form/group_example/group_add_example.dart';
@@ -219,7 +221,7 @@ class AllFormItemStyleExamplePage extends StatelessWidget {
             ));
           },
         ),
-         ListItem(
+        ListItem(
           title: "全选表单项",
           describe: "杂项类型",
           isSupportTheme: true,

@@ -1,3 +1,5 @@
+
+
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 
@@ -6,8 +8,9 @@ class BrnSwitchTitleExample extends StatefulWidget {
   _BrnSwitchTitleExampleState createState() => _BrnSwitchTitleExampleState();
 }
 
-class _BrnSwitchTitleExampleState extends State<BrnSwitchTitleExample> with TickerProviderStateMixin {
-  TabController _controller;
+class _BrnSwitchTitleExampleState extends State<BrnSwitchTitleExample>
+    with TickerProviderStateMixin {
+  late TabController _controller;
 
   @override
   void initState() {
@@ -35,7 +38,10 @@ class _BrnSwitchTitleExampleState extends State<BrnSwitchTitleExample> with Tick
             children: <Widget>[
               Text(
                 '规则',
-                style: TextStyle(color: Color(0xFF222222), fontSize: 28, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Color(0xFF222222),
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold),
               ),
               BrnBubbleText(
                 maxLines: 4,
@@ -105,7 +111,14 @@ class _BrnSwitchTitleExampleState extends State<BrnSwitchTitleExample> with Tick
                 ),
               ),
               BrnSwitchTitle(
-                nameList: ['标题内容1', '标题内容2', '标题内容3', '标题内容4', '标题内容5', '标题内容6'],
+                nameList: [
+                  '标题内容1',
+                  '标题内容2',
+                  '标题内容3',
+                  '标题内容4',
+                  '标题内容5',
+                  '标题内容6'
+                ],
                 defaultSelectIndex: 0,
                 onSelect: (value) {
                   BrnToast.show(value.toString(), context);

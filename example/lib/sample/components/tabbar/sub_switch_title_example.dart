@@ -1,3 +1,5 @@
+
+
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +10,7 @@ class SubSwitchTitleExample extends StatefulWidget {
 
 class _SubSwitchTitleExampleState extends State<SubSwitchTitleExample>
     with TickerProviderStateMixin {
-  TabController _controller;
+  late TabController _controller;
 
   @override
   void initState() {
@@ -36,7 +38,10 @@ class _SubSwitchTitleExampleState extends State<SubSwitchTitleExample>
             children: <Widget>[
               Text(
                 '规则',
-                style: TextStyle(color: Color(0xFF222222), fontSize: 28, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Color(0xFF222222),
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold),
               ),
               BrnBubbleText(
                 maxLines: 4,
@@ -91,7 +96,14 @@ class _SubSwitchTitleExampleState extends State<SubSwitchTitleExample>
                 ),
               ),
               BrnSubSwitchTitle(
-                nameList: ['二级标题1', '二级标题2', '二级标题3', '二级标题4', '二级标题5', '二级标题6'],
+                nameList: [
+                  '二级标题1',
+                  '二级标题2',
+                  '二级标题3',
+                  '二级标题4',
+                  '二级标题5',
+                  '二级标题6'
+                ],
                 defaultSelectIndex: 0,
                 onSelect: (value) {
                   BrnToast.show(value.toString(), context);
@@ -105,7 +117,14 @@ class _SubSwitchTitleExampleState extends State<SubSwitchTitleExample>
                 ),
               ),
               BrnSubSwitchTitle(
-                nameList: ['二级标题1', '二级标题2', '二级标题3', '二级标题4', '二级标题5', '二级标题6'],
+                nameList: [
+                  '二级标题1',
+                  '二级标题2',
+                  '二级标题3',
+                  '二级标题4',
+                  '二级标题5',
+                  '二级标题6'
+                ],
                 defaultSelectIndex: 0,
                 controller: _controller,
                 onSelect: (value) {

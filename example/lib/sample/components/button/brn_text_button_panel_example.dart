@@ -26,7 +26,10 @@ class BrnTextButtonPanelExample extends StatelessWidget {
               text: '平分屏幕展示,不超过4个时全部展示，超过4个了，则只展示3个，剩余的放在更多里面',
             ),
             Text(
-              '正常案例',
+              '正常案例AAA',
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
               style: TextStyle(
                 color: Color(0xFF222222),
                 fontSize: 18,
@@ -101,7 +104,9 @@ class BrnTextButtonPanelExample extends StatelessWidget {
               nameList: ['操作1', '操作2', '操作3', '操作4', '操作5', '操作6'],
               popDirection: BrnPopupDirection.top,
               onTap: (index) {
-                BrnToast.show('第$index个操作', context);
+                BrnDialogManager.showSingleButtonDialog(context, message: 'index $index clicked!', label: 'OK', onTap: (){
+                  Navigator.pop(context);
+                });
               },
             ),
             Text(

@@ -1,3 +1,5 @@
+
+
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +23,10 @@ class _StateTagExampleState extends State<StateTagExample> {
           children: <Widget>[
             Text(
               '规则',
-              style: TextStyle(color: Color(0xFF222222), fontSize: 28, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: Color(0xFF222222),
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold),
             ),
             BrnBubbleText(maxLines: 4, text: '同自定义标签'),
             Text(

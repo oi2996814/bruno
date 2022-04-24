@@ -1,3 +1,5 @@
+
+
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 
@@ -8,11 +10,13 @@ class SelectionViewDateFilterExamplePage extends StatefulWidget {
   SelectionViewDateFilterExamplePage(this._title, this._filters);
 
   @override
-  _SelectionViewExamplePageState createState() => _SelectionViewExamplePageState(_filters);
+  _SelectionViewExamplePageState createState() =>
+      _SelectionViewExamplePageState(_filters);
 }
 
-class _SelectionViewExamplePageState extends State<SelectionViewDateFilterExamplePage> {
-  List<BrnSelectionEntity> _filterData;
+class _SelectionViewExamplePageState
+    extends State<SelectionViewDateFilterExamplePage> {
+  late List<BrnSelectionEntity> _filterData;
 
   _SelectionViewExamplePageState(List<BrnSelectionEntity> filters) {
     _filterData = filters;
@@ -26,19 +30,24 @@ class _SelectionViewExamplePageState extends State<SelectionViewDateFilterExampl
           children: <Widget>[
             BrnSelectionView(
               originalSelectionData: _filterData,
-              onCustomSelectionMenuClick: (int index, BrnSelectionEntity customMenuItem,
+              onCustomSelectionMenuClick: (int index,
+                  BrnSelectionEntity customMenuItem,
                   BrnSetCustomSelectionParams customHandleCallBack) {
                 customHandleCallBack({"customKey": "customValue"});
               },
-              onMoreSelectionMenuClick: (int index, BrnOpenMorePage openMorePage) {
-                openMorePage(updateData: false, moreSelections: widget._filters);
+              onMoreSelectionMenuClick:
+                  (int index, BrnOpenMorePage openMorePage) {
+                openMorePage(
+                    updateData: false, moreSelections: widget._filters);
               },
               onSelectionChanged: (int menuIndex,
                   Map<String, String> filterParams,
                   Map<String, String> customParams,
                   BrnSetCustomSelectionMenuTitle setCustomTitleFunction) {
                 BrnToast.show(
-                    'filterParams : $filterParams' + ',\n customParams : $customParams', context);
+                    'filterParams : $filterParams' +
+                        ',\n customParams : $customParams',
+                    context);
               },
             ),
             Container(

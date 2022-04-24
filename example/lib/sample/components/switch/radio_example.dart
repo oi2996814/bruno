@@ -1,3 +1,5 @@
+
+
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +26,10 @@ class _RadioExampleState extends State<RadioExample> {
           children: <Widget>[
             Text(
               '规则',
-              style: TextStyle(color: Color(0xFF222222), fontSize: 28, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: Color(0xFF222222),
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold),
             ),
             BrnBubbleText(maxLines: 2, text: '具备选中、未选中、以及禁用状态,支持设置左右widget'),
             Text(

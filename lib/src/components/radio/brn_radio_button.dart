@@ -21,10 +21,10 @@ class BrnRadioButton extends StatelessWidget {
 
   /// 选择按钮的padding
   /// 默认EdgeInsets.all(5)
-  final EdgeInsets iconPadding;
+  final EdgeInsets? iconPadding;
 
   /// 配合使用的控件，比如卡片或者text
-  final Widget child;
+  final Widget? child;
 
   /// 控件是否在选择按钮的右边，
   /// true时 控件在选择按钮右边
@@ -44,9 +44,9 @@ class BrnRadioButton extends StatelessWidget {
   final HitTestBehavior behavior;
 
   const BrnRadioButton(
-      {Key key,
-      @required this.radioIndex,
-      @required this.onValueChangedAtIndex,
+      {Key? key,
+      required this.radioIndex,
+      required this.onValueChangedAtIndex,
       this.disable = false,
       this.isSelected = false,
       this.iconPadding,
@@ -67,12 +67,12 @@ class BrnRadioButton extends StatelessWidget {
       mainAxisAlignment: mainAxisAlignment,
       mainAxisSize: mainAxisSize,
       selectedImage: BrunoTools.getAssetImageWithBandColor(
-          BrnAsset.ICON_RADIO_SINGLE_SELECTED),
-      unselectedImage: BrunoTools.getAssetImage(BrnAsset.ICON_RADIO_UNSELECTED),
+          BrnAsset.iconRadioSingleSelected),
+      unselectedImage: BrunoTools.getAssetImage(BrnAsset.iconRadioUnSelected),
       disSelectedImage:
-          BrunoTools.getAssetImage(BrnAsset.ICON_RADIO_DISABLE_MULTI_SELECTED),
+          BrunoTools.getAssetImage(BrnAsset.iconRadioDisableMultiSelected),
       disUnselectedImage:
-          BrunoTools.getAssetImage(BrnAsset.ICON_RADIO_DISABLE_UNSELECTED),
+          BrunoTools.getAssetImage(BrnAsset.iconRadioDisableUnselected),
       child: child,
       onRadioItemClick: () {
         onValueChangedAtIndex(radioIndex, true);

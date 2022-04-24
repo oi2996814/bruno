@@ -1,10 +1,10 @@
 name: bruno
 description: An enterprise-class package of Flutter components for mobile applications.
-version: 2.0.0
+version: 2.1.1
 homepage: https://github.com/LianjiaTech/bruno
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -55,9 +55,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: Condensed
+     - family: Bebas
        fonts:
-         - asset: assets/fonts/DINCondensed-Bold.ttf
+         - asset: assets/fonts/Bebas-Regular.ttf
 #           weight: 700
   #   - family: Trajan Pro
   #     fonts:

@@ -1,6 +1,5 @@
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class NavBarPage extends StatefulWidget {
   final int index;
@@ -12,25 +11,25 @@ class NavBarPage extends StatefulWidget {
 }
 
 class _NavBarPageState extends State<NavBarPage> with TickerProviderStateMixin {
-  TextEditingController textEditingController;
+  TextEditingController? textEditingController;
 
-  TextStyle selectedHeiStyle;
-  TextStyle unSelectedHeiStyle;
-  TextStyle commonHeiStyle;
+  TextStyle? selectedHeiStyle;
+  TextStyle? unSelectedHeiStyle;
+  TextStyle? commonHeiStyle;
 
-  TextStyle selectedBaiStyle;
-  TextStyle unSelectedBaiStyle;
-  TextStyle commonBaiStyle;
+  TextStyle? selectedBaiStyle;
+  TextStyle? unSelectedBaiStyle;
+  TextStyle? commonBaiStyle;
   int currentIndex = 0;
 
-  ValueNotifier<bool> valueNotifier;
-  FocusNode focusNode;
+  late ValueNotifier<bool> valueNotifier;
+  FocusNode? focusNode;
 
-  TabController tabController;
+  TabController? tabController;
 
-  var keyleading = GlobalKey();
+  GlobalKey keyLeading = GlobalKey();
 
-  var actionKey = GlobalKey();
+  GlobalKey actionKey = GlobalKey();
 
   @override
   void initState() {
@@ -38,22 +37,24 @@ class _NavBarPageState extends State<NavBarPage> with TickerProviderStateMixin {
     textEditingController = TextEditingController();
     valueNotifier = ValueNotifier(false);
 
-    selectedHeiStyle =
-        TextStyle(fontSize: 18, color: Color(0xFFFFFFFF), fontWeight: FontWeight.w600);
-    selectedBaiStyle =
-        TextStyle(fontSize: 18, color: Color(0xFF222222), fontWeight: FontWeight.w600);
+    selectedHeiStyle = TextStyle(
+        fontSize: 18, color: Color(0xFFFFFFFF), fontWeight: FontWeight.w600);
+    selectedBaiStyle = TextStyle(
+        fontSize: 18, color: Color(0xFF222222), fontWeight: FontWeight.w600);
 
-    unSelectedHeiStyle =
-        TextStyle(fontSize: 18, color: Color(0xFF999999), fontWeight: FontWeight.w600);
-    unSelectedBaiStyle =
-        TextStyle(fontSize: 18, color: Color(0xFF999999), fontWeight: FontWeight.w600);
+    unSelectedHeiStyle = TextStyle(
+        fontSize: 18, color: Color(0xFF999999), fontWeight: FontWeight.w600);
+    unSelectedBaiStyle = TextStyle(
+        fontSize: 18, color: Color(0xFF999999), fontWeight: FontWeight.w600);
 
-    commonHeiStyle = TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white);
-    commonBaiStyle = TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF222222));
+    commonHeiStyle = TextStyle(
+        fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white);
+    commonBaiStyle = TextStyle(
+        fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF222222));
 
     focusNode = FocusNode();
-    focusNode.addListener(() {
-      if (focusNode.hasFocus) {
+    focusNode!.addListener(() {
+      if (focusNode!.hasFocus) {
         valueNotifier.value = true;
       }
     });
@@ -69,8 +70,8 @@ class _NavBarPageState extends State<NavBarPage> with TickerProviderStateMixin {
     );
   }
 
-  PreferredSizeWidget buildBarByIndex(BuildContext context) {
-    PreferredSizeWidget appBar;
+  PreferredSizeWidget? buildBarByIndex(BuildContext context) {
+    PreferredSizeWidget? appBar;
     switch (widget.index) {
       case 0:
         //2个文字模块切换 左右两个icon hei
@@ -142,12 +143,13 @@ class _NavBarPageState extends State<NavBarPage> with TickerProviderStateMixin {
     return appBar;
   }
 
-  Widget buildContentByIndex(BuildContext context) {
-    Widget widget;
+  Widget? buildContentByIndex(BuildContext context) {
+    Widget? widget;
     switch (this.widget.index) {
       case 0:
-        widget =
-            Center(child: Text('1. 左上角的返回按钮图标支持自定义，本例改成了搜索图标\n2.切换类型的导航栏\n3.顶部模块切换可不限于两个，可多个'));
+        widget = Center(
+            child: Text(
+                '1. 左上角的返回按钮图标支持自定义，本例改成了搜索图标\n2.切换类型的导航栏\n3.顶部模块切换可不限于两个，可多个'));
         break;
       case 4:
         widget = Center(child: Text('多Actions'));
@@ -243,7 +245,14 @@ class _NavBarPageState extends State<NavBarPage> with TickerProviderStateMixin {
         key: actionKey,
         iconPressed: () {
           BrnPopupListWindow.showPopListWindow(context, actionKey,
-              offset: 10, data: ["aaaa", "bbbbb"]);
+              offset: 10, data: ["aaaa", "bbbbb"], onItemClick: (index, item){
+                BrnDialogManager.showConfirmDialog(context, cancel: 'cancel', confirm: 'confirm', message: 'message', onCancel: (){
+                  Navigator.pop(context);
+                });
+                return true;
+              }, onDismiss: (){
+                BrnToast.show('onDismiss', context);
+              });
         },
       ),
     );
@@ -306,13 +315,17 @@ class _NavBarPageState extends State<NavBarPage> with TickerProviderStateMixin {
           Text(
             '标题名称',
             style: TextStyle(
-                fontSize: 18, height: 1, fontWeight: FontWeight.w600, color: Color(0xFF222222)),
+                fontSize: 18,
+                height: 1,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF222222)),
           ),
           Container(
               height: 17,
               padding: EdgeInsets.only(left: 3, right: 3),
               margin: EdgeInsets.only(left: 6),
-              decoration: BoxDecoration(color: Color(0xff8E8E8E).withOpacity(0.15)),
+              decoration:
+                  BoxDecoration(color: Color(0xff8E8E8E).withOpacity(0.15)),
               child: Center(
                 child: Text(
                   '住宅',
@@ -475,12 +488,13 @@ class _NavBarPageState extends State<NavBarPage> with TickerProviderStateMixin {
       leading: Padding(
         padding: const EdgeInsets.only(right: 16),
         child: Row(
-          key: keyleading,
+          key: keyLeading,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
               '类型1',
-              style: TextStyle(color: Color(0xFF222222), height: 1, fontSize: 16),
+              style:
+                  TextStyle(color: Color(0xFF222222), height: 1, fontSize: 16),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 5),
@@ -501,8 +515,15 @@ class _NavBarPageState extends State<NavBarPage> with TickerProviderStateMixin {
         //update 是setState方法的方法命，update() 就可以刷新输入框
         BrnPopupListWindow.showPopListWindow(
           context,
-          keyleading,
+          keyLeading,
           data: ["aaaa", "bbbbb"],
+          onItemClick: (index, data) {
+            BrnDialogManager.showConfirmDialog(context, cancel: 'cancel', confirm: 'confirm', message: 'message');
+            return true;
+          },
+          onDismiss: (){
+            BrnToast.show('onDismiss', context);
+          },
         );
       },
       //输入框 文本内容变化的监听
@@ -538,7 +559,7 @@ class _NavBarPageState extends State<NavBarPage> with TickerProviderStateMixin {
       leading: Padding(
         padding: const EdgeInsets.only(right: 16),
         child: Row(
-          key: keyleading,
+          key: keyLeading,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
@@ -561,7 +582,12 @@ class _NavBarPageState extends State<NavBarPage> with TickerProviderStateMixin {
       leadClickCallback: (controller, update) {
         //controller 是文本控制器，通过controller 可以拿到输入的内容 以及 对输入的内容更改
         //update 是setState方法的方法命，update() 就可以刷新输入框
-        BrnPopupListWindow.showPopListWindow(context, keyleading, data: ["aaaa", "bbbbb"]);
+        BrnPopupListWindow.showPopListWindow(
+          context,
+          keyLeading,
+          data: ["aaaa", "bbbbb"],
+          offset: 10
+        );
       },
       //输入框 文本内容变化的监听
       searchBarInputChangeCallback: (input) {
@@ -656,7 +682,9 @@ class _NavBarPageState extends State<NavBarPage> with TickerProviderStateMixin {
               child: Center(
                 child: Text(
                   '标题',
-                  style: index == currentIndex ? selectedHeiStyle : unSelectedHeiStyle,
+                  style: index == currentIndex
+                      ? selectedHeiStyle
+                      : unSelectedHeiStyle,
                 ),
               ),
             );

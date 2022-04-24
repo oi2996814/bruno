@@ -1,21 +1,25 @@
+
+
 import 'package:bruno/bruno.dart';
 import 'package:example/sample/components/card/bubble/common_bubble_example.dart';
 import 'package:flutter/material.dart';
 
 class SelectionViewMoreCustomFloatLayerExamplePage extends StatefulWidget {
   final String _title;
-  final List<BrnSelectionEntity> _filterData;
+  final List<BrnSelectionEntity>? _filterData;
 
   SelectionViewMoreCustomFloatLayerExamplePage(this._title, this._filterData);
 
   @override
-  _SelectionViewExamplePageState createState() => _SelectionViewExamplePageState();
+  _SelectionViewExamplePageState createState() =>
+      _SelectionViewExamplePageState();
 }
 
-class _SelectionViewExamplePageState extends State<SelectionViewMoreCustomFloatLayerExamplePage> {
-  List<BrnSelectionEntity> items;
+class _SelectionViewExamplePageState
+    extends State<SelectionViewMoreCustomFloatLayerExamplePage> {
+  List<BrnSelectionEntity>? items;
 
-  BrnSelectionViewController controller;
+  BrnSelectionViewController? controller;
 
   var selectionKey = GlobalKey();
 
@@ -44,15 +48,16 @@ class _SelectionViewExamplePageState extends State<SelectionViewMoreCustomFloatL
             child: GestureDetector(
               child: Text("点击关闭弹窗"),
               onTap: () {
-                controller.closeSelectionView();
+                controller!.closeSelectionView();
               },
             ),
           ),
           BrnSelectionView(
             key: selectionKey,
             selectionViewController: controller,
-            originalSelectionData: widget._filterData,
-            onMoreSelectionMenuClick: (int index, BrnOpenMorePage openMorePage) {
+            originalSelectionData: widget._filterData!,
+            onMoreSelectionMenuClick:
+                (int index, BrnOpenMorePage openMorePage) {
               openMorePage(updateData: false);
             },
             onCustomFloatingLayerClick: (int customFloatingLayerIndex,
@@ -66,10 +71,13 @@ class _SelectionViewExamplePageState extends State<SelectionViewMoreCustomFloatL
                 Map<String, String> result = Map();
                 result['Key1'] = 'Value1';
                 result['Key2'] = 'Value2';
-                List<BrnSelectionEntity> resultEntity = List();
-                result?.forEach((userId, userName) {
+                List<BrnSelectionEntity> resultEntity = [];
+                result.forEach((userId, userName) {
                   resultEntity.add(BrnSelectionEntity(
-                      value: userId, title: userName, isSelected: true, type: 'radio'));
+                      value: userId,
+                      title: userName,
+                      isSelected: true,
+                      type: 'radio'));
                 });
                 resultCallBack(resultEntity);
               });
@@ -79,7 +87,9 @@ class _SelectionViewExamplePageState extends State<SelectionViewMoreCustomFloatL
                 Map<String, String> customParams,
                 BrnSetCustomSelectionMenuTitle setCustomTitleFunction) {
               BrnToast.show(
-                  'filterParams : $filterParams' + ',\n customParams : $customParams', context);
+                  'filterParams : $filterParams' +
+                      ',\n customParams : $customParams',
+                  context);
             },
           ),
           Container(
