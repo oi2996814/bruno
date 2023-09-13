@@ -3,25 +3,33 @@ import 'package:bruno/src/theme/configs/brn_selection_config.dart';
 import 'package:bruno/src/utils/brn_tools.dart';
 import 'package:flutter/material.dart';
 
-typedef void ItemClickFunction();
-
+/// 筛选菜单项
 // ignore: must_be_immutable
 class BrnSelectionMenuItemWidget extends StatelessWidget {
-  final String title;
-  final bool isHighLight;
-  final int index;
-  final bool active;
-  final ItemClickFunction itemClickFunction;
 
+  /// 菜单项标题
+  final String title;
+
+  /// 是否高亮
+  final bool isHighLight;
+
+  /// 是否选中
+  final bool active;
+
+  /// 点击事件
+  final VoidCallback? itemClickFunction;
+
+  /// 主题配置
   BrnSelectionConfig themeData;
 
   BrnSelectionMenuItemWidget(
-      {@required this.title,
+      {Key? key,
+      required this.title,
       this.isHighLight = false,
-      this.index,
       this.active = false,
       this.itemClickFunction,
-      this.themeData});
+      required this.themeData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,22 +53,25 @@ class BrnSelectionMenuItemWidget extends StatelessWidget {
                   maxLines: 1,
                   softWrap: true,
                   style: isHighLight
-                      ? themeData.menuSelectedTextStyle?.generateTextStyle()
-                      : themeData.menuNormalTextStyle?.generateTextStyle(),
+                      ? themeData.menuSelectedTextStyle.generateTextStyle()
+                      : themeData.menuNormalTextStyle.generateTextStyle(),
                 ),
               )),
               Padding(
                   padding: EdgeInsets.only(left: 4),
                   child: isHighLight
                       ? (active
-                          ? BrunoTools.getAssetImageWithBandColor(BrnAsset.ICON_ARROWUP_SELECT,
+                          ? BrunoTools.getAssetImageWithBandColor(
+                              BrnAsset.iconArrowUpSelect,
                               configId: themeData.configId)
-                          : BrunoTools.getAssetImageWithBandColor(BrnAsset.ICON_ARROWDOWN_SELECT))
+                          : BrunoTools.getAssetImageWithBandColor(
+                              BrnAsset.iconArrowDownSelect))
                       : (active
-                          ? BrunoTools.getAssetImageWithBandColor(BrnAsset.ICON_ARROWUP_SELECT,
+                          ? BrunoTools.getAssetImageWithBandColor(
+                              BrnAsset.iconArrowUpSelect,
                               configId: themeData.configId)
-                          : BrunoTools.getAssetImage(BrnAsset.ICON_ARROWDOWN_UNSELECT))
-                  )
+                          : BrunoTools.getAssetImage(
+                              BrnAsset.iconArrowDownUnSelect)))
             ],
           ),
         ),
@@ -71,7 +82,7 @@ class BrnSelectionMenuItemWidget extends StatelessWidget {
 
   void _menuItemTapped() {
     if (this.itemClickFunction != null) {
-      this.itemClickFunction();
+      this.itemClickFunction!();
     }
   }
 }

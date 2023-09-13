@@ -1,12 +1,16 @@
+
+
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 
 class TextValueArrowContentExample extends StatefulWidget {
   @override
-  _TextValueArrowContentExampleState createState() => _TextValueArrowContentExampleState();
+  _TextValueArrowContentExampleState createState() =>
+      _TextValueArrowContentExampleState();
 }
 
-class _TextValueArrowContentExampleState extends State<TextValueArrowContentExample> {
+class _TextValueArrowContentExampleState
+    extends State<TextValueArrowContentExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +25,10 @@ class _TextValueArrowContentExampleState extends State<TextValueArrowContentExam
           children: <Widget>[
             Text(
               '规则',
-              style: TextStyle(color: Color(0xFF222222), fontSize: 28, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: Color(0xFF222222),
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold),
             ),
             BrnBubbleText(
               maxLines: 4,
@@ -51,7 +58,7 @@ class _TextValueArrowContentExampleState extends State<TextValueArrowContentExam
                     valueClickCallback: () {
                       BrnToast.show('内容内容内容内容', context);
                     }),
-                BrnInfoModal.keyOrValueLastQuestionInfo("名称名称名称", "内容内容内容内容内容",
+                BrnInfoModal.keyOrValueLastQuestionInfo(context,"名称名称名称", "内容内容内容内容内容",
                     keyShow: true,
                     valueShow: true,
                     keyCallback: () {
@@ -64,9 +71,9 @@ class _TextValueArrowContentExampleState extends State<TextValueArrowContentExam
                     valueClickCallback: () {
                       BrnToast.show('内容内容内容内容', context);
                     }),
-                BrnInfoModal.valueLastClickInfo("名称名称名称", "内容内容内容内容内容", "超链接",
+                BrnInfoModal.valueLastClickInfo(context,"名称名称名称", "内容内容内容内容内容", "超链接",
                     clickCallback: (value) {
-                      BrnToast.show(value, context);
+                      BrnToast.show(value!, context);
                     },
                     isArrow: true,
                     valueClickCallback: () {
@@ -98,7 +105,7 @@ class _TextValueArrowContentExampleState extends State<TextValueArrowContentExam
                     valueClickCallback: () {
                       BrnToast.show('内容内容内容内容', context);
                     }),
-                BrnInfoModal.keyOrValueLastQuestionInfo("名称名称名称", "内容内容内容内容内容",
+                BrnInfoModal.keyOrValueLastQuestionInfo(context,"名称名称名称", "内容内容内容内容内容",
                     keyShow: true,
                     valueShow: true,
                     keyCallback: () {
@@ -111,9 +118,9 @@ class _TextValueArrowContentExampleState extends State<TextValueArrowContentExam
                     valueClickCallback: () {
                       BrnToast.show('内容内容内容内容', context);
                     }),
-                BrnInfoModal.valueLastClickInfo("名称名称名称", "内容内容内容内容内容", "超链接",
+                BrnInfoModal.valueLastClickInfo(context,"名称名称名称", "内容内容内容内容内容", "超链接",
                     clickCallback: (value) {
-                      BrnToast.show(value, context);
+                      BrnToast.show(value!, context);
                     },
                     isArrow: true,
                     valueClickCallback: () {
@@ -145,7 +152,8 @@ class _TextValueArrowContentExampleState extends State<TextValueArrowContentExam
                     valueClickCallback: () {
                       BrnToast.show('内容内容内容内容', context);
                     }),
-                BrnInfoModal.keyOrValueLastQuestionInfo("名称名称名称名称名称名名称名称名称名称", "内容内容内容内容内容",
+                BrnInfoModal.keyOrValueLastQuestionInfo(context,
+                    "名称名称名称名称名称名名称名称名称名称", "内容内容内容内容内容",
                     keyShow: true,
                     valueShow: true,
                     keyCallback: () {
@@ -184,7 +192,8 @@ class _TextValueArrowContentExampleState extends State<TextValueArrowContentExam
                     valueClickCallback: () {
                       BrnToast.show('内容内容内容内容', context);
                     }),
-                BrnInfoModal.keyOrValueLastQuestionInfo("名称名称名称名称名称名名称名称名称名称", "内容内容内容内容内容",
+                BrnInfoModal.keyOrValueLastQuestionInfo(context,
+                    "名称名称名称名称名称名名称名称名称名称", "内容内容内容内容内容",
                     keyShow: true,
                     valueShow: true,
                     keyCallback: () {
@@ -223,7 +232,8 @@ class _TextValueArrowContentExampleState extends State<TextValueArrowContentExam
                     valueClickCallback: () {
                       BrnToast.show('内容内容内容内容', context);
                     }),
-                BrnInfoModal.keyOrValueLastQuestionInfo("名称名称名", "内容内容内容内容内容内容内容内容内容内容",
+                BrnInfoModal.keyOrValueLastQuestionInfo(context,
+                    "名称名称名", "内容内容内容内容内容内容内容内容内容内容",
                     keyShow: true,
                     valueShow: true,
                     keyCallback: () {
@@ -262,7 +272,8 @@ class _TextValueArrowContentExampleState extends State<TextValueArrowContentExam
                     valueClickCallback: () {
                       BrnToast.show('内容内容内容内容', context);
                     }),
-                BrnInfoModal.keyOrValueLastQuestionInfo("名称名称名", "内容内容内容内容内容内容内容内容内容内容",
+                BrnInfoModal.keyOrValueLastQuestionInfo(context,
+                    "名称名称名", "内容内容内容内容内容内容内容内容内容内容",
                     keyShow: true,
                     valueShow: true,
                     keyCallback: () {

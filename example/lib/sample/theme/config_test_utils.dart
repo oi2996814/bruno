@@ -1,12 +1,11 @@
-import 'dart:ui';
 
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 
 class TestConfigUtils {
   ///  默认全局配置
-  static BrnAllThemeConfig defaultAllConfig =
-      BrnAllThemeConfig(commonConfig: defaultCommonConfig, dialogConfig: defaultDialogConfig);
+  static BrnAllThemeConfig defaultAllConfig = BrnAllThemeConfig(
+      commonConfig: defaultCommonConfig, dialogConfig: defaultDialogConfig);
 
   /// 全局默认配置
   static BrnCommonConfig defaultCommonConfig = BrnCommonConfig(
@@ -78,8 +77,8 @@ class TestConfigUtils {
 
     /// 文本字号
     ///
-    /// 特殊数据展示，DIN Condensed数字字体，用于强吸引
-    fontSizeDIN: 28,
+    /// 特殊数据展示，Bebas 数字字体，用于强吸引
+    fontSizeBebas: 28,
 
     /// 标题字体
     /// 名称/页面大标题
@@ -156,18 +155,10 @@ class TestConfigUtils {
     leftAndRightPadding: 24,
     itemSpacing: 24,
     titleMaxLength: 20,
-    titleStyle: BrnTextStyle(color: Color(0xff222222), fontWeight: FontWeight.w600, fontSize: 24),
-    actionsStyle: BrnTextStyle(color: Color(0xFF3072F6), fontWeight: FontWeight.w600, fontSize: 18),
-    flexibleSpace: Container(
-      width: double.infinity,
-      height: MediaQueryData.fromWindow(window).padding.top + 57,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [
-          Color(0xfffafafa),
-          Color(0xfff5f5f5),
-        ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
-      ),
-    ),
+    titleStyle: BrnTextStyle(
+        color: Color(0xff222222), fontWeight: FontWeight.w600, fontSize: 24),
+    actionsStyle: BrnTextStyle(
+        color: Color(0xFF3072F6), fontWeight: FontWeight.w600, fontSize: 18),
   );
 
   static BrnButtonConfig defaultButtonConfig = BrnButtonConfig(
@@ -178,17 +169,19 @@ class TestConfigUtils {
       smallButtonFontSize: 14,
       smallButtonHeight: 36);
 
-  static BrnPairInfoTableConfig defaultPairInfoTableConfig = BrnPairInfoTableConfig(
-      rowSpacing: 6,
-      itemSpacing: 8,
-      valueTextStyle: BrnTextStyle(fontSize: 16),
-      keyTextStyle: BrnTextStyle(fontSize: 16),
-      linkTextStyle: BrnTextStyle(fontSize: 16));
+  static BrnPairInfoTableConfig defaultPairInfoTableConfig =
+      BrnPairInfoTableConfig(
+          rowSpacing: 6,
+          itemSpacing: 8,
+          valueTextStyle: BrnTextStyle(fontSize: 16),
+          keyTextStyle: BrnTextStyle(fontSize: 16),
+          linkTextStyle: BrnTextStyle(fontSize: 16));
 
-  static BrnPairRichInfoGridConfig defaultPairRichInfoGridConfig = BrnPairRichInfoGridConfig(
-      rowSpacing: 6,
-      itemSpacing: 4,
-      valueTextStyle: BrnTextStyle(fontSize: 16),
-      keyTextStyle: BrnTextStyle(fontSize: 16),
-      linkTextStyle: BrnTextStyle(fontSize: 16));
+  static BrnPairRichInfoGridConfig defaultPairRichInfoGridConfig =
+      BrnPairRichInfoGridConfig(
+          rowSpacing: 6,
+          itemSpacing: 4,
+          valueTextStyle: BrnTextStyle(fontSize: 16),
+          keyTextStyle: BrnTextStyle(fontSize: 16),
+          linkTextStyle: BrnTextStyle(fontSize: 16));
 }

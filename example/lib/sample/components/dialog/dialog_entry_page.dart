@@ -73,7 +73,7 @@ class DialogEntryPage extends StatelessWidget {
               },
             ),
             ListItem(
-              title: "标题+信息+警示+单按钮",
+              title: "标题+信息+警示",
               isSupportTheme: true,
               describe: '有标题、单按钮、有辅助文案',
               onPressed: () {
@@ -81,7 +81,7 @@ class DialogEntryPage extends StatelessWidget {
               },
             ),
             ListItem(
-              title: "标题+信息+自定义警示UI+单按钮",
+              title: "标题+信息+自定义警示UI",
               isSupportTheme: true,
               describe: '有标题、单按钮、有辅助文案',
               onPressed: () {
@@ -200,6 +200,13 @@ class DialogEntryPage extends StatelessWidget {
               },
             ),
             ListItem(
+              title: "Safe Dialog",
+              describe: '可以放心 pop 的 Dialog，防止误关闭页面',
+              onPressed: () {
+                _showSafeDialog(context);
+              },
+            ),
+            ListItem(
               title: "Share Dialog",
               isSupportTheme: true,
               describe: '分享Dialog（五个 icon）',
@@ -288,6 +295,7 @@ class DialogEntryPage extends StatelessWidget {
                 return BrnSingleSelectDialog(
                     isClose: true,
                     title: '请选择无效客源原因',
+                    messageText: '请您评价该条线索请您评价该条线索请您评价该条线索请您评价该条线索请您评价该条线索',
                     conditions: conditions,
                     checkedItem: conditions[selectedIndex],
                     submitText: '提交',
@@ -299,13 +307,12 @@ class DialogEntryPage extends StatelessWidget {
                       //光标圆角弧度
                       cursorRadius: Radius.circular(2.0),
                       style: TextStyle(fontSize: 14, color: Color(0xFF222222)),
-                      maxLengthEnforced: true,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       onChanged: (value) {},
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(8.0),
                         hintText: hintText,
-                        hintStyle:
-                            TextStyle(fontSize: 14, color: Color(0xFFCCCCCC)),
+                        hintStyle: TextStyle(fontSize: 14, color: Color(0xFFCCCCCC)),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(2.0),
                             borderSide: BorderSide(
@@ -326,7 +333,7 @@ class DialogEntryPage extends StatelessWidget {
                       state(() {});
                     },
                     onSubmitClick: (data) {
-                      BrnToast.show(data, context);
+                      BrnToast.show(data!, context);
                     });
               },
             ));
@@ -334,7 +341,7 @@ class DialogEntryPage extends StatelessWidget {
 
   ///多选弹框
   void _showMiddleMultiSelectDialog(BuildContext context) {
-    List<MultiSelectItem> data = new List();
+    List<MultiSelectItem> data = [];
     data.add(new MultiSelectItem("100", "感兴趣待跟进"));
     data.add(new MultiSelectItem("101", "感兴趣但对本商圈没兴趣", isChecked: true));
     data.add(new MultiSelectItem("102", "接通后挂断/不感兴趣", isChecked: true));
@@ -361,7 +368,7 @@ class DialogEntryPage extends StatelessWidget {
 
   void _showMiddleMultiSelectWithMessageWidgetDialog(BuildContext context) {
     String hintText = "感兴趣待跟进";
-    List<MultiSelectItem> data = new List();
+    List<MultiSelectItem> data = [];
     data.add(new MultiSelectItem("100", "感兴趣待跟进"));
     data.add(new MultiSelectItem("101", "感兴趣但对本商圈没兴趣", isChecked: true));
     data.add(new MultiSelectItem("102", "接通后挂断/不感兴趣", isChecked: true));
@@ -392,13 +399,12 @@ class DialogEntryPage extends StatelessWidget {
                     //光标圆角弧度
                     cursorRadius: Radius.circular(2.0),
                     style: TextStyle(fontSize: 14, color: Color(0xFF222222)),
-                    maxLengthEnforced: true,
+                    maxLengthEnforcement: MaxLengthEnforcement.enforced,
                     onChanged: (value) {},
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.all(8.0),
                       hintText: hintText,
-                      hintStyle:
-                          TextStyle(fontSize: 14, color: Color(0xFFCCCCCC)),
+                      hintStyle: TextStyle(fontSize: 14, color: Color(0xFFCCCCCC)),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(2.0),
                           borderSide: BorderSide(
@@ -413,7 +419,7 @@ class DialogEntryPage extends StatelessWidget {
                           )),
                     ),
                   ),
-                  onItemClick: (BuildContext contex, int index) {
+                  onItemClick: (BuildContext context, int index) {
                     hintText = data[index].content;
                     state(() {});
                   },
@@ -430,7 +436,7 @@ class DialogEntryPage extends StatelessWidget {
 
   ///多选弹框
   void _showMiddleMultiSelectWithMessageDialog(BuildContext context) {
-    List<MultiSelectItem> data = new List();
+    List<MultiSelectItem> data = [];
     data.add(new MultiSelectItem("100", "感兴趣待跟进"));
     data.add(new MultiSelectItem("101", "感兴趣但对本商圈没兴趣", isChecked: true));
     data.add(new MultiSelectItem("102", "接通后挂断/不感兴趣", isChecked: true));
@@ -467,7 +473,7 @@ class DialogEntryPage extends StatelessWidget {
           padding: const EdgeInsets.only(top: 6, left: 24, right: 24),
           child: BrnCSS2Text.toTextView(
               "这是一条增使用标签修改文字颜色的example\<font color = '#8ac6d1'\>我是带颜色的文字</font>，"
-              "这是颜色标签后边的文字", linksCallback: (String text, String linkUrl) {
+              "这是颜色标签后边的文字", linksCallback: (String? text, String? linkUrl) {
             BrnToast.show('$text clicked!  Url is $linkUrl', context);
           }),
         ),
@@ -489,7 +495,7 @@ class DialogEntryPage extends StatelessWidget {
         autoFocus: true,
         maxLength: 1000,
         maxLines: 2,
-        inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         textInputAction: TextInputAction.done,
         dismissOnActionsTap: false,
         barrierDismissible: true,
@@ -530,7 +536,7 @@ class DialogEntryPage extends StatelessWidget {
         hintText: '提示信息',
         cancelText: '取消',
         confirmText: '确定',
-        maxLength: 100,
+        maxLength: 10,
         barrierDismissible: false,
         textInputAction: TextInputAction.done,
         onConfirm: (value) {
@@ -544,8 +550,7 @@ class DialogEntryPage extends StatelessWidget {
 
   ///对话框样式一：无标题、单按钮
   void _showStyle1Dialog0(BuildContext context) {
-    BrnDialogManager.showSingleButtonDialog(context,
-        label: "知道了", message: "辅助内容容信息", onTap: () {
+    BrnDialogManager.showSingleButtonDialog(context, label: "知道了", message: "辅助内容容信息", onTap: () {
       BrnToast.show('知道了', context);
       Navigator.pop(context);
     });
@@ -577,9 +582,7 @@ class DialogEntryPage extends StatelessWidget {
   ///对话框样式二：有标题、单按钮、有辅助文案
   void _showStyle2Dialog(BuildContext context) {
     BrnDialogManager.showSingleButtonDialog(context,
-        title: "标题内容",
-        label: "知道了",
-        message: "辅助内容信息辅助内容信息辅助内容信息辅助内容信息辅助内容信息", onTap: () {
+        title: "标题内容", label: "知道了", message: "辅助内容信息辅助内容信息辅助内容信息辅助内容信息辅助内容信息", onTap: () {
       BrnToast.show('知道了', context);
       Navigator.pop(context);
     });
@@ -631,8 +634,7 @@ class DialogEntryPage extends StatelessWidget {
           '选项二',
           '选项三',
         ],
-        title: "标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题",
-        indexedActionClickCallback: (index) {
+        title: "标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题", indexedActionClickCallback: (index) {
       BrnToast.show("$index", context);
     });
   }
@@ -645,8 +647,7 @@ class DialogEntryPage extends StatelessWidget {
           '选项二',
           '选项三',
         ],
-        message: "辅助内容信息辅助内容信息辅助内容信息辅助内容信息辅助内容信息",
-        indexedActionClickCallback: (index) {
+        message: "辅助内容信息辅助内容信息辅助内容信息辅助内容信息辅助内容信息", indexedActionClickCallback: (index) {
       BrnToast.show("$index", context);
     });
   }
@@ -660,8 +661,7 @@ class DialogEntryPage extends StatelessWidget {
           '选项二',
           '选项三',
         ],
-        message: "辅助内容信息辅助内容信息辅助内容信息辅助内容信息辅助内容信息",
-        indexedActionClickCallback: (index) {
+        message: "辅助内容信息辅助内容信息辅助内容信息辅助内容信息辅助内容信息", indexedActionClickCallback: (index) {
       BrnToast.show("$index", context);
     });
   }
@@ -684,8 +684,8 @@ class DialogEntryPage extends StatelessWidget {
 
   ///对话框样式七：单按钮 有头部Icon、辅助信息为文案
   void _showStyle7Dialog(BuildContext context) {
-    BrnDialogManager.showSingleButtonDialog(context,
-        showIcon: true, title: "恭喜你完成填写", label: "确定", onTap: () {
+    BrnDialogManager.showSingleButtonDialog(context, showIcon: true, title: "恭喜你完成填写", label: "确定",
+        onTap: () {
       BrnToast.show("确定", context);
       Navigator.pop(context);
     });
@@ -694,9 +694,7 @@ class DialogEntryPage extends StatelessWidget {
   ///对话框样式八：两个按钮，换行标题
   void _showStyle8Dialog(BuildContext context) {
     BrnDialogManager.showConfirmDialog(context,
-        title: "标题内容,标题内容,标题内容标题内容,标题内容标题内容,标题内容",
-        cancel: '取消',
-        confirm: '确定', onConfirm: () {
+        title: "标题内容,标题内容,标题内容标题内容,标题内容标题内容,标题内容", cancel: '取消', confirm: '确定', onConfirm: () {
       BrnToast.show("确定", context);
     }, onCancel: () {
       BrnToast.show("取消", context);
@@ -721,7 +719,7 @@ class DialogEntryPage extends StatelessWidget {
 
   ///对话框样式九：标准的对话框：有标题、双按钮、有警示文案和辅助信息
   void _showStyle9_1Dialog(BuildContext context) {
-    bool status = false;
+    bool? status = false;
     BrnDialogManager.showConfirmDialog(context,
         title: "标题内容？",
         cancel: '取消',
@@ -730,7 +728,7 @@ class DialogEntryPage extends StatelessWidget {
           return Row(children: <Widget>[
             Checkbox(
               value: status,
-              onChanged: (bool aaa) {
+              onChanged: (bool? aaa) {
                 status = aaa;
                 setState(() {});
               },
@@ -750,11 +748,43 @@ class DialogEntryPage extends StatelessWidget {
 
   ///底部有输入框弹框
   void _showBrnLoadingDialog(BuildContext context) {
-    BrnLoadingDialog.show(context);
+    BrnLoadingDialog.show(context).then((value) {
+          BrnToast.show('result: $value', context);
+        });
+    Future.delayed(Duration(seconds: 5)).then((_) {
+      BrnLoadingDialog.dismiss(context, 'dismiss 定时取消');
+    });
+  }
+
+  ///安全关闭的弹框
+  void _showSafeDialog(BuildContext context) {
+    BrnSafeDialog.show(
+        context: context,
+        tag: "AA",
+        builder: (context) {
+          return BrnPageLoading(
+            content: 'Safe AA',
+          );
+        }).then((result) {
+      BrnToast.show('result: $result ', context);
+    });
+
+    BrnSafeDialog.show(
+        context: context,
+        builder: (context) {
+          return BrnPageLoading(
+            content: 'Safe BB',
+          );
+        }).then((result) {
+      BrnToast.show('result: $result ', context);
+    });
+
+    Future.delayed(Duration(seconds: 5)).then((_) {
+      BrnSafeDialog.dismiss(context: context, tag: "AA", result: 'delete dialog AA by tag AA');
+    });
 
     Future.delayed(Duration(seconds: 10)).then((_) {
-      BrnLoadingDialog.dismiss(context);
-      BrnToast.show('定时取消', context);
+      BrnSafeDialog.dismiss(context: context, result: 'delete dialog BB by default tag');
     });
   }
 
@@ -762,9 +792,9 @@ class DialogEntryPage extends StatelessWidget {
     BrnShareDialog brnShareDialog = new BrnShareDialog(
       context: context,
       shareChannels: [
-        BrnShareItemConstants.SHARE_WEIXIN,
-        BrnShareItemConstants.SHARE_LINK,
-        BrnShareItemConstants.SHARE_CUSTOM
+        BrnShareItemConstants.shareWeiXin,
+        BrnShareItemConstants.shareLink,
+        BrnShareItemConstants.shareCustom
       ],
       titleText: "测试标题",
       descText: "测试辅助信息测试辅助信息测试辅助信息测试辅助信息测试辅助信息",
@@ -792,11 +822,11 @@ class DialogEntryPage extends StatelessWidget {
     BrnShareDialog brnShareDialog = new BrnShareDialog(
       context: context,
       shareChannels: [
-        BrnShareItemConstants.SHARE_WEIXIN,
-        BrnShareItemConstants.SHARE_CUSTOM,
-        BrnShareItemConstants.SHARE_CUSTOM,
-        BrnShareItemConstants.SHARE_LINK,
-        BrnShareItemConstants.SHARE_CUSTOM
+        BrnShareItemConstants.shareWeiXin,
+        BrnShareItemConstants.shareCustom,
+        BrnShareItemConstants.shareCustom,
+        BrnShareItemConstants.shareLink,
+        BrnShareItemConstants.shareCustom
       ],
       titleText: "测试标题",
       descText: "测试辅助信息测试辅助信息测试辅助信息测试辅助信息测试辅助信息",
@@ -831,7 +861,7 @@ class DialogEntryPage extends StatelessWidget {
   void _showBrnTwoVerticalButtonDialogDialog(BuildContext context) {
     BrnEnhanceOperationDialog brnShareDialog = new BrnEnhanceOperationDialog(
       context: context,
-      iconType: BrnDialogConstants.ICON_ALERT,
+      iconType: BrnDialogConstants.iconAlert,
       titleText: "强提示文案",
       descText: "这里是文案这里是文案这里是文案这里是文案这里是文案这里是文案这里是文案这里是文案",
       mainButtonText: "主要按钮",
@@ -848,7 +878,7 @@ class DialogEntryPage extends StatelessWidget {
 
   void _showBrnOneVerticalButtonDialogDialog(BuildContext context) {
     BrnEnhanceOperationDialog brnShareDialog = new BrnEnhanceOperationDialog(
-      iconType: BrnDialogConstants.ICON_WARNING,
+      iconType: BrnDialogConstants.iconWarning,
       context: context,
       titleText: "强提示文案",
       descText: "这里是文案这里是文案这里是文案这里是文案这里是文案这里是文案这里是文案这里是文案",
@@ -878,8 +908,8 @@ class DialogEntryPage extends StatelessWidget {
                 "文呢表纯本文呢表纯本文呢表纯本文呢表纯本文呢表纯本文呢表纯本文呢表纯本文呢表纯本文呢表纯本文呢表纯本文呢表纯本文呢表纯本文"
                 "呢表纯本文呢表纯本文呢表纯本文呢表纯本文呢表纯本文呢表纯本文呢表纯本文呢表纯本文呢表纯本文呢表",
             submitText: "提交",
-            linksCallback: (String text, String url) {
-              BrnToast.show(text, context);
+            linksCallback: (String? text, String? url) {
+              BrnToast.show(text!, context);
             },
             onSubmitClick: () {
               BrnToast.show("点击了纯文本弹框", context);
@@ -922,6 +952,7 @@ class DialogEntryPage extends StatelessWidget {
             submitText: "提交",
             onSubmitClick: () {
               BrnToast.show("点击了纯文本弹框", context);
+              Navigator.of(context).pop();
             }));
   }
 

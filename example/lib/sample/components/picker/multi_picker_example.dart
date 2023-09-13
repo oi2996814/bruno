@@ -1,3 +1,5 @@
+
+
 import 'package:bruno/bruno.dart';
 import 'package:example/sample/home/list_item.dart';
 import 'package:flutter/material.dart';
@@ -76,6 +78,7 @@ class MultiPickerExamplePage extends StatelessWidget {
         body: ListView(
           children: <Widget>[
             ListItem(
+              isShowLine: false,
               title: "单列",
               describe: '自定义单列Picker',
               onPressed: () {
@@ -96,7 +99,8 @@ class MultiPickerExamplePage extends StatelessWidget {
                 BrnMultiDataPicker(
                   context: context,
                   title: '来源',
-                  delegate: Brn2RowDelegate(firstSelectedIndex: 1, secondSelectedIndex: 0),
+                  delegate: Brn2RowDelegate(
+                      firstSelectedIndex: 1, secondSelectedIndex: 0),
                   confirmClick: (list) {
                     BrnToast.show(list.toString(), context);
                   },
@@ -111,7 +115,8 @@ class MultiPickerExamplePage extends StatelessWidget {
                   sync: false,
                   context: context,
                   title: '来源',
-                  delegate: Brn2RowCustomDelegate(firstSelectedIndex: 1, secondSelectedIndex: 0),
+                  delegate: Brn2RowCustomDelegate(
+                      firstSelectedIndex: 1, secondSelectedIndex: 0),
                   confirmClick: (list) {
                     BrnToast.show(list.toString(), context);
                   },
@@ -126,7 +131,27 @@ class MultiPickerExamplePage extends StatelessWidget {
                   context: context,
                   title: '来源',
                   delegate: Brn3RowDelegate(
-                      firstSelectedIndex: 1, secondSelectedIndex: 0, thirdSelectedIndex: 0),
+                      firstSelectedIndex: 1,
+                      secondSelectedIndex: 0,
+                      thirdSelectedIndex: 0),
+                  confirmClick: (list) {
+                    BrnToast.show(list.toString(), context);
+                  },
+                ).show();
+              },
+            ),
+            ListItem(
+              title: "默认 Delegate",
+              describe: '使用默认 Delegate 构造数据展示',
+              onPressed: () {
+                BrnMultiDataPicker(
+                  context: context,
+                  title: '来源',
+                  delegate: BrnDefaultMultiDataPickerDelegate(
+                      firstSelectedIndex: 2,
+                      secondSelectedIndex: 1,
+                      thirdSelectedIndex: 1,
+                  data: _getDefaultDelegateData()),
                   confirmClick: (list) {
                     BrnToast.show(list.toString(), context);
                   },
@@ -135,6 +160,19 @@ class MultiPickerExamplePage extends StatelessWidget {
             ),
           ],
         ));
+  }
+
+  List<BrnMultiDataPickerEntity> _getDefaultDelegateData() {
+    BrnMultiDataPickerEntity data = BrnMultiDataPickerEntity(
+        text: '测试1', value: 5095791542795657, children: []);
+
+    BrnMultiDataPickerEntity data2 = BrnMultiDataPickerEntity(
+        text: '测试2', value: 5029051542795656, children: []);
+
+    BrnMultiDataPickerEntity data3 = BrnMultiDataPickerEntity(
+        text: '测试3', value: 5090501542795658, children: []);
+
+    return [data, data2, data3];
   }
 }
 
@@ -180,7 +218,7 @@ class Brn1RowDelegate implements BrnMultiDataPickerDelegate {
   }
 
   @override
-  double rowHeightForComponent(int component) {
+  double? rowHeightForComponent(int component) {
     return null;
   }
 
@@ -247,7 +285,7 @@ class Brn2RowDelegate implements BrnMultiDataPickerDelegate {
   }
 
   @override
-  double rowHeightForComponent(int component) {
+  double? rowHeightForComponent(int component) {
     return null;
   }
 
@@ -324,7 +362,7 @@ class Brn3RowDelegate implements BrnMultiDataPickerDelegate {
   }
 
   @override
-  double rowHeightForComponent(int component) {
+  double? rowHeightForComponent(int component) {
     return null;
   }
 
@@ -358,7 +396,8 @@ class Brn2RowCustomDelegate implements BrnMultiDataPickerDelegate {
   int firstSelectedIndex = 0;
   int secondSelectedIndex = 0;
 
-  Brn2RowCustomDelegate({this.firstSelectedIndex = 0, this.secondSelectedIndex = 0});
+  Brn2RowCustomDelegate(
+      {this.firstSelectedIndex = 0, this.secondSelectedIndex = 0});
 
   @override
   int numberOfComponent() {
@@ -384,7 +423,7 @@ class Brn2RowCustomDelegate implements BrnMultiDataPickerDelegate {
   }
 
   @override
-  double rowHeightForComponent(int component) {
+  double? rowHeightForComponent(int component) {
     return null;
   }
 

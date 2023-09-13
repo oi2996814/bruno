@@ -1,3 +1,5 @@
+
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -6,7 +8,7 @@ class BrnTabbarController extends ChangeNotifier {
   ///
   /// 更多选项距离顶部距离
   ///
-  double top;
+  double? top;
 
   ///
   /// 是否显示更多选项弹框
@@ -16,36 +18,41 @@ class BrnTabbarController extends ChangeNotifier {
   ///
   /// 屏幕高度
   ///
-  double screenHeight;
+  double? screenHeight;
 
   ///
   /// 展开更多图层
   ///
-  OverlayEntry entry;
+  OverlayEntry? entry;
 
   ///
   /// 选中的角标
   ///
   int selectIndex = 0;
 
+  /// 设置选中的位置
+  /// [index] 选中的位置
   void setSelectIndex(int index) {
     selectIndex = index;
     notifyListeners();
   }
 
+  /// 设置更多选项弹出
   void show() {
     isShow = true;
     notifyListeners();
   }
 
+  /// 设置更多选项隐藏
   void hide() {
     isShow = false;
     notifyListeners();
   }
 }
 
+/// 关闭更多弹框事件
 class CloseWindowEvent {
-  bool isShow = false;
+  bool? isShow = false;
 
   CloseWindowEvent({this.isShow});
 }
@@ -59,7 +66,8 @@ class BrnCloseWindowController {
   ///
   bool isShow = false;
 
-  StreamController<CloseWindowEvent> _closeController = StreamController.broadcast();
+  StreamController<CloseWindowEvent> _closeController =
+      StreamController.broadcast();
 
   StreamController<CloseWindowEvent> getCloseController() {
     return _closeController;
@@ -72,7 +80,8 @@ class BrnCloseWindowController {
     isShow = state;
   }
 
+  /// 关闭 "更多" 弹框
   void closeMoreWindow() {
-    _closeController?.add(CloseWindowEvent());
+    _closeController.add(CloseWindowEvent());
   }
 }

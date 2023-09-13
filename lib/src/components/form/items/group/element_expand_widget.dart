@@ -2,13 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+
+
 import 'package:bruno/src/components/form/utils/brn_form_util.dart';
 import 'package:bruno/src/theme/brn_theme_configurator.dart';
 import 'package:bruno/src/theme/configs/brn_form_config.dart';
 import 'package:bruno/src/utils/brn_tools.dart';
-import 'package:bruno/src/utils/font/brn_font.dart';
+import 'package:bruno/src/constants/brn_fonts_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 /// A single-line [ListTile] with a trailing button that expands or collapses
 /// the tile to reveal or hide the [children].
@@ -31,8 +32,8 @@ class ExpansionElementWidget extends StatefulWidget {
   /// the tile to reveal or hide the [children]. The [initiallyExpanded] property must
   /// be non-null.
   ExpansionElementWidget({
-    Key key,
-    @required this.title,
+    Key? key,
+    this.title = "",
     this.subtitle,
     this.backgroundColor,
     this.onExpansionChanged,
@@ -41,13 +42,15 @@ class ExpansionElementWidget extends StatefulWidget {
     this.deleteText,
     this.callback,
     this.themeData,
-  })  : assert(initiallyExpanded != null),
-        super(key: key) {
+  }) : super(key: key) {
     this.themeData ??= BrnFormItemConfig();
     this.themeData = BrnThemeConfigurator.instance
-        .getConfig(configId: this.themeData.configId)
+        .getConfig(configId: this.themeData!.configId)
         .formItemConfig
         .merge(this.themeData);
+    this.themeData = this
+        .themeData!
+        .merge(BrnFormItemConfig(backgroundColor: backgroundColor));
   }
 
   /// The primary content of the list item.
@@ -55,19 +58,19 @@ class ExpansionElementWidget extends StatefulWidget {
   /// Typically a [Text] widget.
   final String title;
 
-  final String deleteText;
+  final String? deleteText;
 
   /// Additional content displayed below the title.
   ///
   /// Typically a [Text] widget.
-  final String subtitle;
+  final String? subtitle;
 
   /// Called when the tile expands or collapses.
   ///
   /// When the tile starts expanding, this function is called with the value
   /// true. When the tile starts collapsing, this function is called with
   /// the value false.
-  final ValueChanged<bool> onExpansionChanged;
+  final ValueChanged<bool>? onExpansionChanged;
 
   /// The widgets that are displayed when the tile expands.
   ///
@@ -75,14 +78,14 @@ class ExpansionElementWidget extends StatefulWidget {
   final List<Widget> children;
 
   /// The color to display behind the sublist when expanded.
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// Specifies if the list tile is initially expanded (true) or collapsed (false, the default).
   final bool initiallyExpanded;
 
-  final VoidCallback callback;
+  final VoidCallback? callback;
 
-  BrnFormItemConfig themeData;
+  BrnFormItemConfig? themeData;
 
   @override
   _ExpansionElementState createState() => _ExpansionElementState();
@@ -90,9 +93,12 @@ class ExpansionElementWidget extends StatefulWidget {
 
 class _ExpansionElementState extends State<ExpansionElementWidget>
     with SingleTickerProviderStateMixin {
-  static final Animatable<double> _easeOutTween = CurveTween(curve: Curves.easeOut);
-  static final Animatable<double> _easeInTween = CurveTween(curve: Curves.easeIn);
-  static final Animatable<double> _halfTween = Tween<double>(begin: 0.0, end: 0.5);
+  static final Animatable<double> _easeOutTween =
+      CurveTween(curve: Curves.easeOut);
+  static final Animatable<double> _easeInTween =
+      CurveTween(curve: Curves.easeIn);
+  static final Animatable<double> _halfTween =
+      Tween<double>(begin: 0.0, end: 0.5);
 
   /// 头部颜色
   final ColorTween _borderColorTween = ColorTween();
@@ -100,26 +106,28 @@ class _ExpansionElementState extends State<ExpansionElementWidget>
   final ColorTween _iconColorTween = ColorTween();
   final ColorTween _backgroundColorTween = ColorTween();
 
-  AnimationController _controller;
-  Animation<double> _iconTurns;
-  Animation<double> _heightFactor;
+  late AnimationController _controller;
+  late Animation<double> _iconTurns;
+  late Animation<double> _heightFactor;
 
   bool _isExpanded = false;
 
-  Widget arrowIcon;
+  late Widget arrowIcon;
 
   @override
   void initState() {
     super.initState();
-    _isExpanded = PageStorage.of(context)?.readState(context) ?? widget.initiallyExpanded;
+    _isExpanded =
+        PageStorage.of(context).readState(context) ?? widget.initiallyExpanded;
 
-    _controller =
-        AnimationController(duration: Duration(milliseconds: 200) /*_kExpand*/, vsync: this);
+    _controller = AnimationController(
+        duration: Duration(milliseconds: 200) /*_kExpand*/, vsync: this);
     _heightFactor = _controller.drive(_easeInTween);
     if (_isExpanded) {
       _iconTurns = _controller.drive(_halfTween.chain(_easeInTween));
     } else {
-      _iconTurns = _controller.drive(Tween<double>(begin: 0.5, end: 0.0).chain(_easeInTween));
+      _iconTurns = _controller
+          .drive(Tween<double>(begin: 0.5, end: 0.0).chain(_easeInTween));
     }
 
     /// 头部颜色
@@ -155,18 +163,19 @@ class _ExpansionElementState extends State<ExpansionElementWidget>
           if (!mounted) return;
         });
       }
-      PageStorage.of(context)?.writeState(context, _isExpanded);
+      PageStorage.of(context).writeState(context, _isExpanded);
     });
-    if (widget.onExpansionChanged != null) widget.onExpansionChanged(_isExpanded);
+    if (widget.onExpansionChanged != null) {
+      widget.onExpansionChanged!(_isExpanded);
+    }
   }
 
-  Widget _buildHeader(BuildContext context, Widget child) {
+  Widget _buildHeader(BuildContext context, Widget? child) {
     final Color borderSideColor = /*_borderColor.value ??*/ Colors.transparent;
-    final Color backgroundColor = /*_backgroundColor.value ??*/ Colors.transparent;
 
     return Container(
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: widget.themeData!.backgroundColor,
         border: Border(
           top: BorderSide(color: borderSideColor),
           bottom: BorderSide(color: borderSideColor),
@@ -176,7 +185,6 @@ class _ExpansionElementState extends State<ExpansionElementWidget>
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            color: Colors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -191,9 +199,10 @@ class _ExpansionElementState extends State<ExpansionElementWidget>
                         Container(
                             padding: EdgeInsets.only(right: 6),
                             child: Text(
-                              widget.title ?? "",
-                              style:
-                                  BrnFormUtil.getHeadTitleTextStyle(widget.themeData, isBold: true),
+                              widget.title,
+                              style: BrnFormUtil.getHeadTitleTextStyle(
+                                  widget.themeData!,
+                                  isBold: true),
                             )),
                         RotationTransition(
                           turns: _iconTurns,
@@ -208,7 +217,7 @@ class _ExpansionElementState extends State<ExpansionElementWidget>
                   child: GestureDetector(
                     onTap: () {
                       if (widget.callback != null) {
-                        widget.callback();
+                        widget.callback!();
                       }
                     },
                     child: Container(
@@ -217,7 +226,7 @@ class _ExpansionElementState extends State<ExpansionElementWidget>
                         widget.deleteText ?? "",
                         style: TextStyle(
                           color: Color(0xFFFA3F3F),
-                          fontSize: BrnFont.FONT_16,
+                          fontSize: BrnFonts.f16,
                         ),
                       ),
                     ),
@@ -229,14 +238,13 @@ class _ExpansionElementState extends State<ExpansionElementWidget>
 
           // 副标题
           Container(
-            color: Colors.white,
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.only(left: 20, top: 4, bottom: 14),
             child: Offstage(
-              offstage: (widget.subtitle == null || widget.subtitle.isEmpty),
+              offstage: (widget.subtitle == null || widget.subtitle!.isEmpty),
               child: Text(
                 widget.subtitle ?? "",
-                style: BrnFormUtil.getSubTitleTextStyle(widget.themeData),
+                style: BrnFormUtil.getSubTitleTextStyle(widget.themeData!),
               ),
             ),
           ),
@@ -263,8 +271,8 @@ class _ExpansionElementState extends State<ExpansionElementWidget>
 
     /// title 文字颜色
     _headerColorTween
-      ..begin = theme.textTheme.subhead.color
-      ..end = theme.textTheme.subhead.color;
+      ..begin = theme.textTheme.titleMedium!.color
+      ..end = theme.textTheme.titleMedium!.color;
 
     /// 展开收起图标颜色
     _iconColorTween

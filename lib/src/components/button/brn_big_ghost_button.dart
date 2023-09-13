@@ -1,4 +1,7 @@
+
+
 import 'package:bruno/src/components/button/brn_normal_button.dart';
+import 'package:bruno/src/l10n/brn_intl.dart';
 import 'package:bruno/src/theme/brn_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -17,32 +20,29 @@ import 'package:flutter/material.dart';
 ///  * [BrnBigMainButton], 大主色调按钮
 ///  * [BrnBigOutlineButton], 大边框按钮
 
-/// 默认水平间距
-const double _BHorizontalPadding = 16;
-
-/// 默认垂直间距
-const double _BVerticalPadding = 8;
-
 class BrnBigGhostButton extends StatelessWidget {
-  ///按钮文案，默认'确认'
-  final String title;
+  /// 按钮文案，默认'确认'
+  final String? title;
 
-  ///文案颜色
-  final Color titleColor;
+  /// 文案颜色
+  final Color? titleColor;
 
-  ///按钮背景颜色
-  final Color bgColor;
+  /// 按钮背景颜色
+  final Color? bgColor;
 
-  ///点击回调
-  final VoidCallback onTap;
+  /// 点击回调
+  final VoidCallback? onTap;
 
-  ///默认父布局可用空间
-  final double width;
-  final BrnButtonConfig themeData;
+  /// 默认父布局可用空间
+  final double? width;
 
+  /// button theme config
+  final BrnButtonConfig? themeData;
+
+  /// create BrnBigGhostButton
   const BrnBigGhostButton({
-    Key key,
-    this.title = '确认',
+    Key? key,
+    this.title,
     this.titleColor,
     this.bgColor,
     this.onTap,
@@ -55,23 +55,20 @@ class BrnBigGhostButton extends StatelessWidget {
     BrnButtonConfig defaultThemeConfig = themeData ?? BrnButtonConfig();
     defaultThemeConfig = BrnThemeConfigurator.instance
         .getConfig(configId: defaultThemeConfig.configId)
-        .buttonConfig
-        .merge(defaultThemeConfig);
+        .buttonConfig.merge(defaultThemeConfig);
 
     return BrnNormalButton(
       borderRadius: BorderRadius.circular(defaultThemeConfig.bigButtonRadius),
       constraints: BoxConstraints.tightFor(
           width: width ?? double.infinity,
           height: defaultThemeConfig.bigButtonHeight),
-      backgroundColor:
-          bgColor ?? defaultThemeConfig.commonConfig.brandPrimary.withOpacity(0.05),
+      backgroundColor: bgColor ??
+          defaultThemeConfig.commonConfig.brandPrimary.withOpacity(0.05),
       onTap: onTap,
       alignment: Alignment.center,
-      text: title ?? '确认',
+      text: title ?? BrnIntl.of(context).localizedResource.confirm,
       textColor: titleColor ?? defaultThemeConfig.commonConfig.brandPrimary,
       fontSize: defaultThemeConfig.bigButtonFontSize,
-      insertPadding: EdgeInsets.symmetric(
-          vertical: _BVerticalPadding, horizontal: _BHorizontalPadding),
     );
   }
 }

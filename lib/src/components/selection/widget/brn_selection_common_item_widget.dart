@@ -6,43 +6,56 @@ import 'package:bruno/src/utils/brn_tools.dart';
 import 'package:bruno/src/utils/css/brn_css_2_text.dart';
 import 'package:flutter/material.dart';
 
-typedef void ItemSelectFunction(BrnSelectionEntity entity);
-
-// ignore: must_be_immutable
+/// [BrnSelectionSingleListWidget] 子组件中的单项
 class BrnSelectionCommonItemWidget extends StatelessWidget {
+
+  /// 单项数据
   final BrnSelectionEntity item;
-  final Color backgroundColor;
-  final Color selectedBackgroundColor;
+
+  /// 背景色
+  final Color? backgroundColor;
+
+  /// 选中项背景色
+  final Color? selectedBackgroundColor;
+
+  /// 是否当前焦点
   final bool isCurrentFocused;
+
+  /// 是否是第一级
   final bool isFirstLevel;
 
+  /// 是否是多选列表类型
   final bool isMoreSelectionListType;
 
-  final ItemSelectFunction itemSelectFunction;
+  /// 单选回调
+  final ValueChanged<BrnSelectionEntity>? itemSelectFunction;
 
-  BrnSelectionConfig themeData;
+  /// 主题配置
+  final BrnSelectionConfig? themeData;
 
   BrnSelectionCommonItemWidget({
-    @required this.item,
+    Key? key,
+    required this.item,
     this.backgroundColor,
     this.isFirstLevel = false,
     this.isMoreSelectionListType = false,
     this.itemSelectFunction,
     this.selectedBackgroundColor,
-    this.isCurrentFocused,
+    this.isCurrentFocused = false,
     this.themeData,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var checkbox;
-    if (!item.isUnLimit() && (item.children == null || item.children.length == 0)) {
+    Container checkbox;
+    if (!item.isUnLimit() && (item.children.isEmpty)) {
       if (item.isInLastLevel() && item.hasCheckBoxBrother()) {
         checkbox = Container(
           padding: EdgeInsets.only(left: 6),
           width: 21,
           child: (item.isSelected)
-              ? BrunoTools.getAssetImageWithBandColor(BrnAsset.iconMultiSelected)
+              ? BrunoTools.getAssetImageWithBandColor(
+                  BrnAsset.iconMultiSelected)
               : BrunoTools.getAssetImage(BrnAsset.iconUnSelect),
         );
       } else {
@@ -55,7 +68,7 @@ class BrnSelectionCommonItemWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (itemSelectFunction != null) {
-          itemSelectFunction(item);
+          itemSelectFunction!(item);
         }
       },
       child: Container(
@@ -86,13 +99,14 @@ class BrnSelectionCommonItemWidget extends StatelessWidget {
               Visibility(
                 visible: !BrunoTools.isEmpty(item.subTitle),
                 child: Padding(
-                  padding: EdgeInsets.only(right: item.isInLastLevel() ? 21 : 0),
+                  padding:
+                      EdgeInsets.only(right: item.isInLastLevel() ? 21 : 0),
                   child: BrnCSS2Text.toTextView(item.subTitle ?? '',
                       defaultStyle: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.normal,
                           decoration: TextDecoration.none,
-                          color: themeData.commonConfig.colorTextSecondary),
+                          color: themeData?.commonConfig.colorTextSecondary),
                       maxLines: 1,
                       textOverflow: TextOverflow.ellipsis),
                 ),
@@ -104,7 +118,8 @@ class BrnSelectionCommonItemWidget extends StatelessWidget {
     );
   }
 
-  Color getItemBGColor() {
+  /// 获取当前节点的背景色
+  Color? getItemBGColor() {
     if (isCurrentFocused) {
       return this.selectedBackgroundColor;
     } else {
@@ -112,6 +127,7 @@ class BrnSelectionCommonItemWidget extends StatelessWidget {
     }
   }
 
+  /// 是否高亮
   bool isHighLight(BrnSelectionEntity item) {
     if (item.isInLastLevel()) {
       if (item.isUnLimit()) {
@@ -124,34 +140,40 @@ class BrnSelectionCommonItemWidget extends StatelessWidget {
     }
   }
 
+  /// 是否加粗
   bool isBold(BrnSelectionEntity item) {
     if (isHighLight(item)) {
       return true;
     } else {
-      return item.hasCheckBoxBrother() && item.selectedList().length > 0;
+      return item.hasCheckBoxBrother() && item.selectedList().isNotEmpty;
     }
   }
 
-  TextStyle getItemTextStyle() {
+  /// 获取当前节点的文本样式
+  TextStyle? getItemTextStyle() {
     if (isHighLight(item)) {
-      return themeData.itemSelectedTextStyle.generateTextStyle();
+      return themeData?.itemSelectedTextStyle.generateTextStyle();
     } else if (isBold(item)) {
-      return themeData.itemBoldTextStyle.generateTextStyle();
+      return themeData?.itemBoldTextStyle.generateTextStyle();
     }
-    return themeData.itemNormalTextStyle.generateTextStyle();
+    return themeData?.itemNormalTextStyle.generateTextStyle();
   }
 
+  /// 获取当前节点的子节点中，选中的数量
   String getSelectedItemCount(BrnSelectionEntity item) {
     String itemCount = "";
-    if ((BrnSelectionUtil.getTotalLevel(item) < 3 || !isFirstLevel) && item.children != null) {
-      int count = item.children.where((f) => f.isSelected && !f.isUnLimit()).length;
+    if ((BrnSelectionUtil.getTotalLevel(item) < 3 || !isFirstLevel) &&
+        item.children.isNotEmpty) {
+      int count =
+          item.children.where((f) => f.isSelected && !f.isUnLimit()).length;
       if (count > 1) {
         return '($count)';
       } else if (count == 1 && item.hasCheckBoxBrother()) {
         return '($count)';
       } else {
-        var unLimited = item.children.where((f) => f.isSelected && f.isUnLimit()).toList();
-        if (unLimited.length > 0) {
+        var unLimited =
+            item.children.where((f) => f.isSelected && f.isUnLimit()).toList();
+        if (unLimited.isNotEmpty) {
           return '(全部)';
         }
       }

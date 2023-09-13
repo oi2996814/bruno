@@ -1,11 +1,18 @@
-import "package:flutter/foundation.dart";
 import 'package:flutter/material.dart';
 
+/// 日期选择器动画控制器
 class BrnSelectionDatePickerController extends ChangeNotifier {
-  bool isShow = false; //是否显示下拉筛选列表
-  OverlayEntry entry;
 
-  double screenHeight; //显示下拉筛选列表的图层
+  /// 是否显示下拉筛选列表
+  bool isShow;
+
+  /// OverlayEntry 用于展示隐藏子组件
+  OverlayEntry? entry;
+
+  BrnSelectionDatePickerController({
+    this.isShow = false,
+    this.entry,
+  });
 
   void show() {
     isShow = true;
@@ -13,5 +20,7 @@ class BrnSelectionDatePickerController extends ChangeNotifier {
 
   void hide() {
     isShow = false;
+    entry?.remove();
+    entry = null;
   }
 }

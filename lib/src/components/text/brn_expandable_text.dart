@@ -1,8 +1,9 @@
+import 'package:bruno/src/l10n/brn_intl.dart';
 import 'package:bruno/src/theme/brn_theme_configurator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-typedef TextExpandedCallback  = Function(bool) ;
+typedef TextExpandedCallback = Function(bool);
 
 /// 具备展开收起功能的文字面板
 ///
@@ -35,20 +36,20 @@ class BrnExpandableText extends StatefulWidget {
   final String text;
 
   ///显示的最多行数
-  final int maxLines;
+  final int? maxLines;
 
   /// 文本的样式
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
 
   /// 展开或者收起的时候的回调
-  final TextExpandedCallback onExpanded;
+  final TextExpandedCallback? onExpanded;
 
   /// 更多按钮渐变色的初始色 默认白色
-  final Color color;
+  final Color? color;
 
   const BrnExpandableText(
-      {Key key,
-      @required this.text,
+      {Key? key,
+      required this.text,
       this.maxLines = 1000000,
       this.textStyle,
       this.onExpanded,
@@ -59,13 +60,7 @@ class BrnExpandableText extends StatefulWidget {
 }
 
 class _BrnExpandableTextState extends State<BrnExpandableText> {
-  bool _expanded;
-
-  @override
-  void initState() {
-    super.initState();
-    _expanded = false;
-  }
+  bool _expanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -114,9 +109,13 @@ class _BrnExpandableTextState extends State<BrnExpandableText> {
     Color btnColor = widget.color ?? Colors.white;
 
     Text tx = Text(
-      '更多',
+      BrnIntl.of(context).localizedResource.more,
       style: TextStyle(
-          color: BrnThemeConfigurator.instance.getConfig().commonConfig.brandPrimary, fontSize: 14),
+          color: BrnThemeConfigurator.instance
+              .getConfig()
+              .commonConfig
+              .brandPrimary,
+          fontSize: 14),
     );
     Container cnt = Container(
       padding: EdgeInsets.only(left: 22),
@@ -135,7 +134,7 @@ class _BrnExpandableTextState extends State<BrnExpandableText> {
         setState(() {
           _expanded = true;
           if (null != widget.onExpanded) {
-            widget.onExpanded(_expanded);
+            widget.onExpanded!(_expanded);
           }
         });
       },
@@ -144,10 +143,10 @@ class _BrnExpandableTextState extends State<BrnExpandableText> {
 
   Widget _expandedText(context, String text) {
     return RichText(
-      textScaleFactor: MediaQuery.of(context).textScaleFactor,
+        textScaleFactor: MediaQuery.of(context).textScaleFactor,
         text: TextSpan(text: text, style: _defaultTextStyle(), children: [
-      _foldButtonSpan(context),
-    ]));
+          _foldButtonSpan(context),
+        ]));
   }
 
   TextStyle _defaultTextStyle() {
@@ -155,16 +154,22 @@ class _BrnExpandableTextState extends State<BrnExpandableText> {
         TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w400,
-          color: BrnThemeConfigurator.instance.getConfig().commonConfig.colorTextBase,
+          color: BrnThemeConfigurator.instance
+              .getConfig()
+              .commonConfig
+              .colorTextBase,
         );
     return style;
   }
 
   InlineSpan _foldButtonSpan(context) {
     return TextSpan(
-        text: ' 收起',
+        text: ' '+ BrnIntl.of(context).localizedResource.collapse,
         style: TextStyle(
-          color: BrnThemeConfigurator.instance.getConfig().commonConfig.brandPrimary,
+          color: BrnThemeConfigurator.instance
+              .getConfig()
+              .commonConfig
+              .brandPrimary,
           fontSize: 14,
         ),
         recognizer: TapGestureRecognizer()
@@ -172,7 +177,7 @@ class _BrnExpandableTextState extends State<BrnExpandableText> {
             setState(() {
               _expanded = false;
               if (null != widget.onExpanded) {
-                widget.onExpanded(_expanded);
+                widget.onExpanded!(_expanded);
               }
             });
           });

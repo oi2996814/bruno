@@ -1,18 +1,22 @@
+
+
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 
 class SelectionViewMultiRangeExamplePage extends StatefulWidget {
   final String _title;
-  final List<BrnSelectionEntity> _filters;
+  final List<BrnSelectionEntity>? _filters;
 
   SelectionViewMultiRangeExamplePage(this._title, this._filters);
 
   @override
-  _SelectionViewExamplePageState createState() => _SelectionViewExamplePageState();
+  _SelectionViewExamplePageState createState() =>
+      _SelectionViewExamplePageState();
 }
 
-class _SelectionViewExamplePageState extends State<SelectionViewMultiRangeExamplePage> {
-  List<String> titles;
+class _SelectionViewExamplePageState
+    extends State<SelectionViewMultiRangeExamplePage> {
+  List<String>? titles;
 
   @override
   void initState() {
@@ -26,7 +30,7 @@ class _SelectionViewExamplePageState extends State<SelectionViewMultiRangeExampl
         body: Column(
           children: <Widget>[
             BrnSelectionView(
-              originalSelectionData: widget._filters,
+              originalSelectionData: widget._filters!,
               onSelectionChanged: (int menuIndex,
                   Map<String, String> filterParams,
                   Map<String, String> customParams,
@@ -34,10 +38,11 @@ class _SelectionViewExamplePageState extends State<SelectionViewMultiRangeExampl
                 BrnToast.show(filterParams.toString(), context);
               },
               onSelectionPreShow: (int index, BrnSelectionEntity entity) {
-                if (entity.key == "one_range_key" || entity.key == "two_range_key") {
-                  return BrnSelectionWindowType.Range;
+                if (entity.key == "one_range_key" ||
+                    entity.key == "two_range_key") {
+                  return BrnSelectionWindowType.range;
                 }
-                return entity.filterShowType;
+                return entity.filterShowType!;
               },
             ),
             Container(

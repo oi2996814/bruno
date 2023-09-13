@@ -1,3 +1,5 @@
+
+
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 
@@ -8,14 +10,14 @@ class BrnTabbarStickyExample extends StatefulWidget {
 
 class _BrnTabbarStickyExampleState extends State<BrnTabbarStickyExample>
     with SingleTickerProviderStateMixin {
-  TabController tabController;
+  TabController? tabController;
 
   GlobalKey globalKey = GlobalKey();
 
   ScrollController scrollController = ScrollController();
 
-  BrnCloseWindowController closeWindowController;
-  var tabs = List<BadgeTab>();
+  BrnCloseWindowController? closeWindowController;
+  List<BadgeTab> tabs = <BadgeTab>[];
 
   @override
   void initState() {
@@ -29,7 +31,7 @@ class _BrnTabbarStickyExampleState extends State<BrnTabbarStickyExample>
     tabController = TabController(length: tabs.length, vsync: this);
     closeWindowController = BrnCloseWindowController();
     scrollController.addListener(() {
-      closeWindowController.closeMoreWindow();
+      closeWindowController!.closeMoreWindow();
     });
   }
 
@@ -42,11 +44,13 @@ class _BrnTabbarStickyExampleState extends State<BrnTabbarStickyExample>
           ),
           body: NestedScrollView(
             controller: scrollController,
-            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 buildHeaderWidget(),
                 SliverOverlapAbsorber(
-                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                  handle:
+                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                   sliver: SliverPersistentHeader(
                     pinned: true,
                     delegate: StickyTabBarDelegate(
@@ -57,8 +61,10 @@ class _BrnTabbarStickyExampleState extends State<BrnTabbarStickyExample>
                       moreWindowText: "Tabs描述",
                       onTap: (state, index) {
                         state.refreshBadgeState(index);
-                        scrollController.animateTo(globalKey.currentContext.size.height,
-                            duration: Duration(milliseconds: 200), curve: Curves.linear);
+                        scrollController.animateTo(
+                            globalKey.currentContext!.size!.height,
+                            duration: Duration(milliseconds: 200),
+                            curve: Curves.linear);
                       },
                       onMorePop: () {},
                       closeController: closeWindowController,
@@ -81,8 +87,8 @@ class _BrnTabbarStickyExampleState extends State<BrnTabbarStickyExample>
           ),
         ),
         onWillPop: () {
-          if (closeWindowController.isShow) {
-            closeWindowController.closeMoreWindow();
+          if (closeWindowController!.isShow) {
+            closeWindowController!.closeMoreWindow();
             return Future.value(false);
           }
           return Future.value(true);
@@ -105,10 +111,11 @@ class _BrnTabbarStickyExampleState extends State<BrnTabbarStickyExample>
 class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   final BrnTabBar child;
 
-  StickyTabBarDelegate({@required this.child});
+  StickyTabBarDelegate({required this.child});
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return this.child;
   }
 

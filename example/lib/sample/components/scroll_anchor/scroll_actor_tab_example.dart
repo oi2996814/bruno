@@ -1,3 +1,5 @@
+
+
 import 'dart:math';
 
 import 'package:bruno/bruno.dart';
@@ -11,19 +13,23 @@ class ScrollActorTabExample extends StatelessWidget {
         title: '锚点',
       ),
       body: BrnAnchorTab(
-        itemCount: 10,
+        itemCount: 20,
         widgetIndexedBuilder: (context, index) {
-          return Container(
-            child: Center(child: Text('$index')),
-            height: Random().nextInt(400).toDouble(),
-            color: Color.fromARGB(Random().nextInt(255), Random().nextInt(255),
-                Random().nextInt(255), Random().nextInt(255)),
-          );
+          return StatefulBuilder(builder: (_, state) {
+            double height = Random().nextInt(400).toDouble();
+            return GestureDetector(child: Container(
+              child: Center(child: Text('$index')),
+              height: height,
+              color: Color.fromARGB(Random().nextInt(255), Random().nextInt(255),
+                  Random().nextInt(255), Random().nextInt(255)),
+            ),
+            onTap: (){
+              state(() {});
+            },);
+          });
         },
         tabIndexedBuilder: (context, index) {
-          return BadgeTab(
-            text: 'index $index'
-          );
+          return BadgeTab(text: 'index $index');
         },
       ),
     );

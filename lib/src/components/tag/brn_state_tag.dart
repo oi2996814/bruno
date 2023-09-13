@@ -15,18 +15,19 @@ import 'package:flutter/material.dart';
 ///
 class BrnStateTag extends StatelessWidget {
   final String tagText;
-  final Color backgroundColor;
-  final Color textColor;
   final TagState tagState;
+  final Color? backgroundColor;
+  final Color? textColor;
 
-  //默认为等待状态,黄色
-  const BrnStateTag(
-      {Key key,
-      this.tagText,
-      this.backgroundColor,
-      this.textColor,
-      this.tagState = TagState.waiting})
-      : super(key: key);
+  /// 状态标签是反应状态的形式，根据不同的[tagState]呈现不同的背景色和文字颜色
+  /// 默认为等待状态, 黄色
+  const BrnStateTag({
+    Key? key,
+    required this.tagText,
+    this.tagState = TagState.waiting,
+    this.backgroundColor,
+    this.textColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +35,13 @@ class BrnStateTag extends StatelessWidget {
       tagText: tagText,
       textPadding: EdgeInsets.only(bottom: 0, left: 4, right: 4, top: 0),
       textColor: textColor ?? getTagColor(tagState),
-      backgroundColor: backgroundColor ?? getTagColor(tagState).withOpacity(0.1),
+      backgroundColor:
+          backgroundColor ?? getTagColor(tagState).withOpacity(0.1),
     );
   }
 
+  /// 根据状态获取背景色
+  /// [state] 状态, 默认为 waiting
   Color getTagColor(TagState state) {
     switch (state) {
       case TagState.invalidate:

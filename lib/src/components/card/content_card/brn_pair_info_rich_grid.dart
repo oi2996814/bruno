@@ -1,5 +1,3 @@
-import 'dart:ui' as ui;
-
 import 'package:bruno/src/constants/brn_asset_constants.dart';
 import 'package:bruno/src/theme/base/brn_text_style.dart';
 import 'package:bruno/src/theme/brn_theme_configurator.dart';
@@ -37,27 +35,32 @@ import 'package:flutter/material.dart';
 ///  * [BrnPairInfoTable], 单列key-value信息集合组件
 ///
 class BrnRichInfoGrid extends StatelessWidget {
-  final List<BrnRichGridInfo> pairInfoList;
+
+  /// 待展示的文本信息
+  final List<BrnRichGridInfo>? pairInfoList;
 
   ///行间距 纵向
-  final double rowSpace;
+  final double? rowSpace;
 
   ///gridView 为children包裹的padding，默认是从media中获取，支持修改
   ///同gridView的padding
-  final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry? padding;
 
   ///元素间距 横向
-  final double space;
+  final double? space;
 
-  final double itemHeight;
+  /// item 的高度
+  final double? itemHeight;
 
   /// 一共多少列 默认2列
   final int crossAxisCount;
 
-  final BrnPairRichInfoGridConfig themeData;
+  /// the theme config of BrnRichInfoGrid
+  final BrnPairRichInfoGridConfig? themeData;
 
+  /// create BrnRichInfoGrid
   BrnRichInfoGrid({
-    Key key,
+    Key? key,
     this.pairInfoList,
     this.padding,
     this.rowSpace,
@@ -69,18 +72,16 @@ class BrnRichInfoGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (pairInfoList == null || pairInfoList.isEmpty) {
-      return Container(
-        height: 0,
-        width: 0,
-      );
+    if (pairInfoList == null || pairInfoList!.isEmpty) {
+      return const SizedBox.shrink();
     }
 
     return _buildGridView(context);
   }
 
   Widget _buildGridView(context) {
-    BrnPairRichInfoGridConfig defaultConfig = themeData ?? BrnPairRichInfoGridConfig();
+    BrnPairRichInfoGridConfig defaultConfig =
+        themeData ?? BrnPairRichInfoGridConfig();
 
     defaultConfig = defaultConfig.merge(BrnPairRichInfoGridConfig(
         itemSpacing: space, rowSpacing: rowSpace, itemHeight: itemHeight));
@@ -95,7 +96,8 @@ class BrnRichInfoGrid extends StatelessWidget {
         if (gridWidth == double.infinity) {
           gridWidth = MediaQuery.of(context).size.width;
         }
-        double itemHeight = defaultConfig.itemHeight * (MediaQuery.textScaleFactorOf(context));
+        double itemHeight =
+            defaultConfig.itemHeight * (MediaQuery.textScaleFactorOf(context));
         double itemWidth = (gridWidth - defaultConfig.itemSpacing) / 2;
 
         var gridView = GridView.builder(
@@ -115,16 +117,17 @@ class BrnRichInfoGrid extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 _getKeyWidget(
-                  pairInfoList[index],
+                  pairInfoList![index],
                   gridWidth,
                   context,
                   defaultConfig,
                 ),
-                _getValueWidget(pairInfoList[index], defaultConfig)
+                _getValueWidget(pairInfoList![index], defaultConfig)
               ],
             );
           },
-          itemCount: (null != this.pairInfoList) ? this.pairInfoList.length : 0,
+          itemCount:
+              (null != this.pairInfoList) ? this.pairInfoList!.length : 0,
         );
         return gridView;
       },
@@ -133,37 +136,28 @@ class BrnRichInfoGrid extends StatelessWidget {
 
   Widget _getKeyWidget(BrnRichGridInfo info, double width, BuildContext context,
       BrnPairRichInfoGridConfig config) {
-    if (info == null || info.keyPart == null) {
-      return Container(
-        height: 0,
-        width: 0,
-      );
+    if (info.keyPart == null) {
+      return const SizedBox.shrink();
     }
 
     if (info.keyPart is String) {
       return Container(
         constraints: BoxConstraints(maxWidth: width / 4),
         child: Text(info.keyPart,
-            maxLines: 1, overflow: TextOverflow.ellipsis, style: _getKeyStyle(themeData: config)),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: _getKeyStyle(themeData: config)),
       );
     }
     if (info.keyPart is Widget) {
       return info.keyPart;
     }
 
-    return Container(
-      height: 0,
-      width: 0,
-    );
+    return const SizedBox.shrink();
   }
 
-  Widget _getValueWidget(BrnRichGridInfo info, BrnPairRichInfoGridConfig config) {
-    if (info == null) {
-      return Container(
-        height: 0,
-        width: 0,
-      );
-    }
+  Widget _getValueWidget(
+      BrnRichGridInfo info, BrnPairRichInfoGridConfig config) {
     if (info.valuePart == null) {
       return Text('--', style: _getValueStyle('--', themeData: config));
     }
@@ -180,14 +174,14 @@ class BrnRichInfoGrid extends StatelessWidget {
       return info.valuePart;
     }
 
-    return Container(
-      height: 0,
-      width: 0,
-    );
+    return const SizedBox.shrink();
   }
 }
 
+/// 用于构建文本信息
 class BrnRichGridInfo {
+
+  ///
   final dynamic keyPart;
   final dynamic valuePart;
 
@@ -203,39 +197,41 @@ class BrnRichGridInfo {
   /// clickCallback 可点击文案点击的回调
   /// isArrow 是否最右侧存在箭头
   static BrnRichGridInfo valueLastClickInfo(
+    BuildContext context,
     String keyTitle,
     String valueTitle, {
-    Function(String key) keyQuestionCallback,
-    Function(String value) valueQuestionCallback,
-    String clickTitle,
-    Color clickColor,
-    Function(String clickValue) clickCallback,
-    BrnPairRichInfoGridConfig themeData,
+    Function(String key)? keyQuestionCallback,
+    Function(String value)? valueQuestionCallback,
+    String clickTitle = '',
+    Color? clickColor,
+    Function(String clickValue)? clickCallback,
+    BrnPairRichInfoGridConfig? themeData,
   }) {
     themeData ??= BrnPairRichInfoGridConfig();
-    themeData = themeData
-        .merge(BrnPairRichInfoGridConfig(linkTextStyle: BrnTextStyle(color: clickColor)));
     themeData = BrnThemeConfigurator.instance
         .getConfig(configId: themeData.configId)
         .pairRichInfoGridConfig
         .merge(themeData);
+    themeData = themeData.merge(BrnPairRichInfoGridConfig(
+        linkTextStyle: BrnTextStyle(color: clickColor)));
 
     Widget _getQuestionImage(bool isKey) {
       return GestureDetector(
           onTap: () {
             if (isKey) {
-              keyQuestionCallback(keyTitle);
+              keyQuestionCallback!(keyTitle);
             } else {
-              valueQuestionCallback(valueTitle);
+              valueQuestionCallback!(valueTitle);
             }
           },
           child: Padding(
             padding: EdgeInsets.only(left: isKey ? 0 : 4),
-            child: BrunoTools.getAssetSizeImage(BrnAsset.ICON_PAIR_INFO_QUESTION, 14, 14),
+            child: BrunoTools.getAssetSizeImage(
+                BrnAsset.iconPairInfoQuestion, 14, 14),
           ));
     }
 
-    Widget _getClickValue({BrnPairRichInfoGridConfig themeData}) {
+    Widget _getClickValue({required BrnPairRichInfoGridConfig themeData}) {
       return GestureDetector(
         onTap: () {
           if (clickCallback != null) {
@@ -243,13 +239,14 @@ class BrnRichGridInfo {
           }
         },
         child: Padding(
-          padding: EdgeInsets.only(left: 4),
+          padding: const EdgeInsets.only(left: 4),
           child: Container(
             constraints: BoxConstraints(maxWidth: 56),
             child: Text(clickTitle,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: _getClickStyle(clickTitle, clickColor, themeData: themeData)),
+                style: _getClickStyle(clickTitle, clickColor,
+                    themeData: themeData)),
           ),
         ),
       );
@@ -257,10 +254,10 @@ class BrnRichGridInfo {
 
     bool isShowKeyQuestion = keyQuestionCallback != null;
     bool isShowValueQuestion = valueQuestionCallback != null;
-    bool isShowValueClick = clickTitle != null && clickTitle.isNotEmpty;
+    bool isShowValueClick = clickTitle.isNotEmpty;
 
-    MediaQueryData mediaQuery = MediaQueryData.fromWindow(ui.window);
-    double screen = mediaQuery?.size?.width ?? 375;
+    MediaQueryData mediaQuery = MediaQueryData.fromView(View.of(context));
+    double screen = mediaQuery.size.width;
 
     Widget key = Container(
       constraints: BoxConstraints(
@@ -273,18 +270,13 @@ class BrnRichGridInfo {
         children: <Widget>[
           Flexible(
             child: Text(
-              keyTitle ?? "",
+              keyTitle,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: _getKeyStyle(themeData: themeData),
             ),
           ),
-          isShowKeyQuestion
-              ? _getQuestionImage(true)
-              : Container(
-                  height: 0,
-                  width: 0,
-                ),
+          isShowKeyQuestion ? _getQuestionImage(true) : const SizedBox.shrink(),
           Text(
             '：',
             style: _getKeyStyle(themeData: themeData),
@@ -301,7 +293,7 @@ class BrnRichGridInfo {
         children: <Widget>[
           Flexible(
             child: Text(
-              valueTitle ?? "",
+              valueTitle,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: _getValueStyle(valueTitle, themeData: themeData),
@@ -309,16 +301,10 @@ class BrnRichGridInfo {
           ),
           isShowValueClick
               ? _getClickValue(themeData: themeData)
-              : Container(
-                  height: 0,
-                  width: 0,
-                ),
+              : const SizedBox.shrink(),
           isShowValueQuestion
               ? _getQuestionImage(false)
-              : Container(
-                  height: 0,
-                  width: 0,
-                ),
+              : const SizedBox.shrink(),
         ],
       ),
     );
@@ -327,12 +313,13 @@ class BrnRichGridInfo {
   }
 }
 
-TextStyle _getKeyStyle({BrnPairRichInfoGridConfig themeData}) =>
-    themeData.keyTextStyle?.generateTextStyle();
+TextStyle? _getKeyStyle({BrnPairRichInfoGridConfig? themeData}) =>
+    themeData?.keyTextStyle.generateTextStyle();
 
-TextStyle _getClickStyle(String content, Color clickColor,
-        {BrnPairRichInfoGridConfig themeData}) =>
-    themeData.linkTextStyle?.generateTextStyle();
+TextStyle? _getClickStyle(String? content, Color? clickColor,
+        {BrnPairRichInfoGridConfig? themeData}) =>
+    themeData?.linkTextStyle.generateTextStyle();
 
-TextStyle _getValueStyle(String content, {BrnPairRichInfoGridConfig themeData}) =>
-    themeData?.valueTextStyle?.generateTextStyle();
+TextStyle? _getValueStyle(String content,
+        {BrnPairRichInfoGridConfig? themeData}) =>
+    themeData?.valueTextStyle.generateTextStyle();

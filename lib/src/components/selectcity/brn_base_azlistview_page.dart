@@ -7,48 +7,52 @@ import 'package:bruno/src/components/selectcity/brn_az_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:lpinyin/lpinyin.dart';
 
-//带右侧定位器的list页面
+/// 带右侧定位器的list页面
 abstract class BaseAZListViewPage extends StatefulWidget {
   @override
   _BaseAZListViewPageState createState() => _BaseAZListViewPageState();
 
-  //设置页面的title
+  /// 设置页面的title
   PreferredSizeWidget createAppBar();
 
-  //设置页面的数据源
+  /// 设置页面的数据源
   Future createFuture();
 
-  //从数据源中提取列表
+  /// 从数据源中提取列表
   List<ISuspensionBean> pickListFromData(data);
 
-  //列表的widget
+  /// 列表的widget
   Widget buildItemWidget(ISuspensionBean item);
 
-  //悬浮的widget
-  Widget buildSuspensionWidget(String tag);
+  /// 悬浮的widget
+  Widget buildSuspensionWidget(String? tag);
 
+  /// 顶部展示的数据
   List<ISuspensionBean> getTopData() {
-    return List<ISuspensionBean>();
+    return <ISuspensionBean>[];
   }
 
-  //item的高度 默认50
+  /// item的高度 默认50
   double getItemHeight() => 50.0;
 
-  //悬浮的条目的高度
+  /// 悬浮的条目的高度
   double getSuspensionHeight() => 46.0;
 
-  //每个modal 对应的 tag，默认是拼音来设置
+  /// 每个modal 对应的 tag，默认是拼音来设置
   String createTagByModal(ISuspensionBean bean) {
-    String pinyin = PinyinHelper.getPinyinE(bean.name);
-    return pinyin.substring(0, 1).toUpperCase();
+    if (bean.name.isNotEmpty) {
+      String pinyin = PinyinHelper.getPinyinE(bean.name);
+      return pinyin.substring(0, 1).toUpperCase();
+    }
+    return "";
   }
 }
 
 class _BaseAZListViewPageState extends State<BaseAZListViewPage> {
-  String suspensionTag = "";
+  String? suspensionTag = "";
 
-  List<ISuspensionBean> _dataList = List();
-  StreamController<String> streamController;
+  List<ISuspensionBean> _dataList = [];
+  late StreamController<String> streamController;
 
   @override
   void initState() {
@@ -70,14 +74,15 @@ class _BaseAZListViewPageState extends State<BaseAZListViewPage> {
             if (snapShot.connectionState == ConnectionState.done) {
               if (snapShot.hasError) {
                 return BrnAbnormalStateUtils.getEmptyWidgetByState(
-                    context, AbnormalState.networkConnectError, (index) {
+                    context, AbnormalState.networkConnectError,
+                    action: (index) {
                   setState(() {});
                 });
               } else {
                 return buildContentBody(snapShot.data);
               }
             }
-            return null;
+            return Container();
           },
         ));
   }
@@ -95,7 +100,8 @@ class _BaseAZListViewPageState extends State<BaseAZListViewPage> {
     List<ISuspensionBean> top = widget.getTopData();
 
     if (_dataList.isEmpty && top.isEmpty) {
-      return BrnAbnormalStateUtils.getEmptyWidgetByState(context, AbnormalState.noData, (index) {});
+      return BrnAbnormalStateUtils.getEmptyWidgetByState(
+          context, AbnormalState.noData);
     }
 
     suspensionTag = top.isEmpty ? _dataList[0].tag : top[0].tag;
@@ -106,7 +112,7 @@ class _BaseAZListViewPageState extends State<BaseAZListViewPage> {
             child: StreamBuilder(
           initialData: suspensionTag,
           stream: streamController.stream,
-          builder: (context, snapShot) {
+          builder: (context, AsyncSnapshot snapShot) {
             return AzListView(
               data: _dataList,
               topData: top,
@@ -125,14 +131,14 @@ class _BaseAZListViewPageState extends State<BaseAZListViewPage> {
     );
   }
 
-  Widget _buildSusWidget(String susTag) {
+  Widget _buildSusWidget(String? susTag) {
     return Container(
       height: widget.getSuspensionHeight(),
       child: widget.buildSuspensionWidget(susTag),
     );
   }
 
-  void _handleList(List<ISuspensionBean> list) {
+  void _handleList(List<ISuspensionBean>? list) {
     if (list == null || list.isEmpty) return;
     for (int i = 0, length = list.length; i < length; i++) {
       String tag = widget.createTagByModal(list[i]);
@@ -151,7 +157,7 @@ class _BaseAZListViewPageState extends State<BaseAZListViewPage> {
   }
 
   Widget _buildListItem(ISuspensionBean model) {
-    String susTag = model.tag;
+    String? susTag = model.tag;
     return Column(
       children: <Widget>[
         //当offstage为true，当前控件不会被绘制在屏幕上

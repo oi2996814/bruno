@@ -1,4 +1,6 @@
-import 'package:bruno/bruno.dart';
+import 'package:bruno/src/components/radio/brn_radio_core.dart';
+import 'package:bruno/src/constants/brn_asset_constants.dart';
+import 'package:bruno/src/utils/brn_tools.dart';
 import 'package:flutter/material.dart';
 
 ///单选按钮
@@ -21,10 +23,10 @@ class BrnRadioButton extends StatelessWidget {
 
   /// 选择按钮的padding
   /// 默认EdgeInsets.all(5)
-  final EdgeInsets iconPadding;
+  final EdgeInsets? iconPadding;
 
   /// 配合使用的控件，比如卡片或者text
-  final Widget child;
+  final Widget? child;
 
   /// 控件是否在选择按钮的右边，
   /// true时 控件在选择按钮右边
@@ -36,22 +38,30 @@ class BrnRadioButton extends StatelessWidget {
   /// 默认值MainAxisAlignment.start
   final MainAxisAlignment mainAxisAlignment;
 
+  /// 控件和选择按钮在row布局里面的crossAxisAlignment
+  /// 默认值CrossAxisAlignment.center
+  final CrossAxisAlignment crossAxisAlignment;
+
   /// 控件和选择按钮在row布局里面的mainAxisSize
   /// 默认值MainAxisSize.min
   final MainAxisSize mainAxisSize;
 
-  const BrnRadioButton({
-    Key key,
-    @required this.radioIndex,
-    @required this.onValueChangedAtIndex,
-    this.disable = false,
-    this.isSelected = false,
-    this.iconPadding,
-    this.child,
-    this.childOnRight = true,
-    this.mainAxisAlignment = MainAxisAlignment.start,
-    this.mainAxisSize = MainAxisSize.min,
-  });
+  /// 默认值HitTestBehavior.translucent控制widget.onRadioItemClick触发的点击范围
+  final HitTestBehavior behavior;
+
+  const BrnRadioButton(
+      {Key? key,
+      required this.radioIndex,
+      required this.onValueChangedAtIndex,
+      this.disable = false,
+      this.isSelected = false,
+      this.iconPadding,
+      this.child,
+      this.childOnRight = true,
+      this.mainAxisAlignment = MainAxisAlignment.start,
+      this.crossAxisAlignment = CrossAxisAlignment.center,
+      this.mainAxisSize = MainAxisSize.min,
+      this.behavior = HitTestBehavior.translucent});
 
   @override
   Widget build(BuildContext context) {
@@ -62,15 +72,20 @@ class BrnRadioButton extends StatelessWidget {
       iconPadding: iconPadding,
       childOnRight: childOnRight,
       mainAxisAlignment: mainAxisAlignment,
+      crossAxisAlignment: crossAxisAlignment,
       mainAxisSize: mainAxisSize,
-      selectedImage: BrunoTools.getAssetImageWithBandColor(BrnAsset.ICON_RADIO_SINGLE_SELECTED),
-      unselectedImage: BrunoTools.getAssetImage(BrnAsset.ICON_RADIO_UNSELECTED),
-      disSelectedImage: BrunoTools.getAssetImage(BrnAsset.ICON_RADIO_DISABLE_MULTI_SELECTED),
-      disUnselectedImage: BrunoTools.getAssetImage(BrnAsset.ICON_RADIO_DISABLE_UNSELECTED),
+      selectedImage: BrunoTools.getAssetImageWithBandColor(
+          BrnAsset.iconRadioSingleSelected),
+      unselectedImage: BrunoTools.getAssetImage(BrnAsset.iconRadioUnSelected),
+      disSelectedImage:
+          BrunoTools.getAssetImage(BrnAsset.iconRadioDisableMultiSelected),
+      disUnselectedImage:
+          BrunoTools.getAssetImage(BrnAsset.iconRadioDisableUnselected),
       child: child,
       onRadioItemClick: () {
         onValueChangedAtIndex(radioIndex, true);
       },
+      behavior: behavior,
     );
   }
 }

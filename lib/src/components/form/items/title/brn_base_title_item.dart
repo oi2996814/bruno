@@ -1,8 +1,9 @@
+
+
 import 'package:bruno/src/components/form/utils/brn_form_util.dart';
 import 'package:bruno/src/theme/brn_theme_configurator.dart';
 import 'package:bruno/src/theme/configs/brn_form_config.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 ///
 /// 可组合title类型录入项
@@ -16,7 +17,7 @@ class BrnBaseTitle extends StatefulWidget {
   final String title;
 
   /// 子标题
-  final String subTitle;
+  final String? subTitle;
 
   /// 是否必填项
   final bool isRequire;
@@ -32,42 +33,48 @@ class BrnBaseTitle extends StatefulWidget {
   /// 2. 若赋值为非空字符串时 展示"问号图标&文案"，
   /// 3. 若不赋值或赋值为null时 不显示提示项
   /// 默认值为 3
-  final String tipLabel;
+  final String? tipLabel;
 
   /// 标题Widget
-  final Widget titleWidget;
+  final Widget? titleWidget;
 
   /// 子标题Widget
-  final Widget subTitleWidget;
+  final Widget? subTitleWidget;
 
   /// 右侧自定义操作区
-  final Widget customActionWidget;
+  final Widget? customActionWidget;
 
   /// 点击"？"图标回调
-  final VoidCallback onTip;
+  final VoidCallback? onTip;
+
+  /// 背景色
+  final Color? backgroundColor;
 
   /// form配置
-  BrnFormItemConfig themeData;
+  BrnFormItemConfig? themeData;
 
   BrnBaseTitle({
-    Key key,
-    this.title: "",
+    Key? key,
+    this.title = "",
     this.subTitle,
-    this.isRequire: false,
-    this.isEdit: true,
-    this.error: "",
+    this.isRequire = false,
+    this.isEdit = true,
+    this.error = "",
     this.tipLabel,
     this.titleWidget,
     this.subTitleWidget,
     this.customActionWidget,
     this.onTip,
+    this.backgroundColor,
     this.themeData,
-  }) {
+  }) : super(key: key) {
     this.themeData ??= BrnFormItemConfig();
     this.themeData = BrnThemeConfigurator.instance
-        .getConfig(configId: this.themeData.configId)
+        .getConfig(configId: this.themeData!.configId)
         .formItemConfig
         .merge(this.themeData);
+    this.themeData = this.themeData!.merge(
+        BrnFormItemConfig(backgroundColor: backgroundColor));
   }
 
   @override
@@ -85,8 +92,8 @@ class BrnTitleState extends State<BrnBaseTitle> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
-      padding: BrnFormUtil.itemEdgeInsets(widget.themeData),
+      color: widget.themeData!.backgroundColor,
+      padding: BrnFormUtil.itemEdgeInsets(widget.themeData!),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -98,10 +105,10 @@ class BrnTitleState extends State<BrnBaseTitle> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Container(
-                  padding: BrnFormUtil.titleEdgeInsetsForHead(widget.isRequire, widget.themeData),
+                  padding: BrnFormUtil.titleEdgeInsetsForHead(
+                      widget.isRequire, widget.themeData!),
                   child: Row(
                     children: <Widget>[
-
                       // 必填项符号
                       BrnFormUtil.buildRequireWidget(widget.isRequire),
 
@@ -109,7 +116,8 @@ class BrnTitleState extends State<BrnBaseTitle> {
                       getTitleWidget(),
 
                       // 问号提示
-                      BrnFormUtil.buildTipLabelWidget(widget.tipLabel, widget.onTip, widget.themeData),
+                      BrnFormUtil.buildTipLabelWidget(
+                          widget.tipLabel, widget.onTip, widget.themeData!),
                     ],
                   ),
                 ),
@@ -117,7 +125,7 @@ class BrnTitleState extends State<BrnBaseTitle> {
                 // 自定义操作区
                 Offstage(
                   offstage: (widget.customActionWidget == null),
-                  child: widget.customActionWidget ?? Container(),
+                  child: widget.customActionWidget ?? const SizedBox.shrink(),
                 ),
               ],
             ),
@@ -125,12 +133,12 @@ class BrnTitleState extends State<BrnBaseTitle> {
 
           // 副标题
           Offstage(
-            offstage: (widget.subTitle == null || widget.subTitle.isEmpty),
+            offstage: (widget.subTitle == null || widget.subTitle!.isEmpty),
             child: getSubTitleWidget(),
           ),
 
           // 错误提示
-          BrnFormUtil.buildErrorWidget(widget.error, widget.themeData)
+          BrnFormUtil.buildErrorWidget(widget.error, widget.themeData!)
         ],
       ),
     );
@@ -138,24 +146,24 @@ class BrnTitleState extends State<BrnBaseTitle> {
 
   Widget getTitleWidget() {
     if (widget.titleWidget != null) {
-      return widget.titleWidget;
+      return widget.titleWidget!;
     } else {
-      return BrnFormUtil.buildTitleWidget(widget.title, widget.themeData);
+      return BrnFormUtil.buildTitleWidget(widget.title, widget.themeData!);
     }
   }
 
   Widget getSubTitleWidget() {
     if (widget.subTitleWidget != null) {
       return Container(
-        padding: BrnFormUtil.subTitleEdgeInsets(widget.themeData),
+        padding: BrnFormUtil.subTitleEdgeInsets(widget.themeData!),
         child: widget.subTitleWidget,
       );
     } else {
       return Container(
-          padding: BrnFormUtil.subTitleEdgeInsets(widget.themeData),
+          padding: BrnFormUtil.subTitleEdgeInsets(widget.themeData!),
           child: Text(
             widget.subTitle ?? "",
-            style: BrnFormUtil.getSubTitleTextStyle(widget.themeData),
+            style: BrnFormUtil.getSubTitleTextStyle(widget.themeData!),
           ));
     }
   }

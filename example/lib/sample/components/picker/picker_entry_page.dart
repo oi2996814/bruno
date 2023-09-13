@@ -1,3 +1,5 @@
+
+
 import 'dart:convert';
 
 import 'package:bruno/bruno.dart';
@@ -7,11 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'date_picker_example.dart';
+import 'expend_multi_item.dart';
 import 'multi_picker_example.dart';
 
 class PickerEntryPage extends StatelessWidget {
   final String _title;
-  List<BrnPickerEntity> dataList = List();
+  final List<BrnPickerEntity> dataList = [];
 
   PickerEntryPage(this._title);
 
@@ -56,6 +59,13 @@ class PickerEntryPage extends StatelessWidget {
             ),
             ListItem(
               title: "Picker/多选/勾选（MultiSelectBottomPicker）",
+              describe: '底部多选弹框(自定义数据协议)',
+              onPressed: () {
+                _showExpandBottomMultiSelectPicker(context);
+              },
+            ),
+            ListItem(
+              title: "Picker/多选/勾选（MultiSelectBottomPicker）",
               describe: '底部多选弹框(实现限制选择个数)',
               onPressed: () {
                 _showCountLimitBottomMultiSelectPicker(context);
@@ -80,11 +90,12 @@ class PickerEntryPage extends StatelessWidget {
               describe: "底部级联选择框",
               onPressed: () {
                 rootBundle.loadString('assets/list_picker.json').then((data) {
-                  List<BrnPickerEntity> _selectionData = List()
-                    ..addAll((JsonDecoder().convert(data)["data"]['list'] as List ?? [])
-                        .map((o) => BrnPickerEntity.fromMap(o)));
-                  if (_selectionData != null && _selectionData.length > 0) {
-                    _selectionData?.forEach((f) => f.configChild());
+                  List<BrnPickerEntity> _selectionData = []..addAll(
+                      (JsonDecoder().convert(data)["data"]['list'] as List? ??
+                              [])
+                          .map((o) => BrnPickerEntity.fromMap(o)));
+                  if (_selectionData.length > 0) {
+                    _selectionData.forEach((f) => f.configChild());
                     if (dataList.length == 0) {
                       dataList.addAll(_selectionData);
                     }
@@ -98,11 +109,12 @@ class PickerEntryPage extends StatelessWidget {
               describe: "底部级联选择框（Title 动态改变）",
               onPressed: () {
                 rootBundle.loadString('assets/list_picker.json').then((data) {
-                  List<BrnPickerEntity> _selectionData = List()
-                    ..addAll((JsonDecoder().convert(data)["data"]['list'] as List ?? [])
-                        .map((o) => BrnPickerEntity.fromMap(o)));
-                  if (_selectionData != null && _selectionData.length > 0) {
-                    _selectionData?.forEach((f) => f.configChild());
+                  List<BrnPickerEntity> _selectionData = []..addAll(
+                      (JsonDecoder().convert(data)["data"]['list'] as List? ??
+                              [])
+                          .map((o) => BrnPickerEntity.fromMap(o)));
+                  if (_selectionData.length > 0) {
+                    _selectionData.forEach((f) => f.configChild());
                     if (dataList.length == 0) {
                       dataList.addAll(_selectionData);
                     }
@@ -129,11 +141,13 @@ class PickerEntryPage extends StatelessWidget {
 
   ///多选弹框
   void _showBottomMultiSelectPicker(BuildContext context) {
-    List<BrnMultiSelectBottomPickerItem> items = new List();
+    List<BrnMultiSelectBottomPickerItem> items = [];
     items.add(new BrnMultiSelectBottomPickerItem("100", "这里是标题1"));
     items.add(new BrnMultiSelectBottomPickerItem("101", "这里是标题2"));
-    items.add(new BrnMultiSelectBottomPickerItem("102", "这里是标题3", isChecked: true));
-    items.add(new BrnMultiSelectBottomPickerItem("103", "这里是标题4", isChecked: true));
+    items.add(
+        new BrnMultiSelectBottomPickerItem("102", "这里是标题3", isChecked: true));
+    items.add(
+        new BrnMultiSelectBottomPickerItem("103", "这里是标题4", isChecked: true));
     items.add(new BrnMultiSelectBottomPickerItem("104", "这里是标题5"));
     items.add(new BrnMultiSelectBottomPickerItem("104", "这里是标题6"));
     BrnMultiSelectListPicker.show(
@@ -151,13 +165,42 @@ class PickerEntryPage extends StatelessWidget {
     );
   }
 
+  ///多选弹框自定义数据协议
+  void _showExpandBottomMultiSelectPicker(BuildContext context) {
+    List<ExpendMultiSelectBottomPickerItem> items = [];
+    items.add(new ExpendMultiSelectBottomPickerItem("100", "这里是标题1",attribute1: "第一条自定义参数1"));
+    items.add(new ExpendMultiSelectBottomPickerItem("101", "这里是标题2",attribute1: "第二条自定义参数2"));
+    items.add(
+        new ExpendMultiSelectBottomPickerItem("102", "这里是标题3", isChecked: true,attribute1: "第三条自定义参数3"));
+    items.add(
+        new ExpendMultiSelectBottomPickerItem("103", "这里是标题4", isChecked: true));
+    items.add(new ExpendMultiSelectBottomPickerItem("104", "这里是标题5"));
+    items.add(new ExpendMultiSelectBottomPickerItem("104", "这里是标题6"));
+    BrnMultiSelectListPicker.show<ExpendMultiSelectBottomPickerItem>(
+      context,
+      items: items,
+      pickerTitleConfig: BrnPickerTitleConfig(titleContent: "多选 Picker"),
+      onSubmit: (List<ExpendMultiSelectBottomPickerItem> data) {
+        var str = "";
+        data.forEach((item) {
+          String attribute = item.attribute1 ?? "";
+          str = str + attribute;
+        });
+        BrnToast.show(str, context);
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
   /// 实现限制选择数量的情况
   void _showCountLimitBottomMultiSelectPicker(BuildContext context) {
-    List<BrnMultiSelectBottomPickerItem> items = new List();
+    List<BrnMultiSelectBottomPickerItem> items = [];
     items.add(new BrnMultiSelectBottomPickerItem("100", "这里是标题1"));
     items.add(new BrnMultiSelectBottomPickerItem("101", "这里是标题2"));
-    items.add(new BrnMultiSelectBottomPickerItem("102", "这里是标题3", isChecked: true));
-    items.add(new BrnMultiSelectBottomPickerItem("103", "这里是标题4", isChecked: true));
+    items.add(
+        new BrnMultiSelectBottomPickerItem("102", "这里是标题3", isChecked: true));
+    items.add(
+        new BrnMultiSelectBottomPickerItem("103", "这里是标题4", isChecked: true));
     items.add(new BrnMultiSelectBottomPickerItem("104", "这里是标题5"));
     items.add(new BrnMultiSelectBottomPickerItem("104", "这里是标题6"));
     showModalBottomSheet(
@@ -201,7 +244,7 @@ class PickerEntryPage extends StatelessWidget {
       cancelDismiss: true,
       confirmDismiss: false,
       onConfirm: (context, string) {
-        BrnToast.show(string, context);
+        BrnToast.show(string ?? '', context);
         return;
       },
       onCancel: (_) {
@@ -212,16 +255,17 @@ class PickerEntryPage extends StatelessWidget {
     );
   }
 
-  void _showRangePicker(BuildContext context, List<BrnPickerEntity> _selectionData) {
-    _selectionData?.forEach((f) => f.configChild());
+  void _showRangePicker(
+      BuildContext context, List<BrnPickerEntity> _selectionData) {
+    _selectionData.forEach((f) => f.configChild());
     var selectionMenuView = BrnMultiColumnPicker(
       entity: _selectionData[3],
       defaultFocusedIndexes: [0, -1, -1],
-      onConfirm: (Map<String, List<BrnPickerEntity>> result, int firstIndex,
-          int secondIndex, int thirdIndex) {
-        List<String> pickResult = List();
+      onConfirm: (Map<String, List<BrnPickerEntity>> result, int? firstIndex,
+          int? secondIndex, int? thirdIndex) {
+        List<String> pickResult = [];
         result.forEach((key, val) {
-          List<String> tmp = List();
+          List<String> tmp = [];
           val.forEach((item) {
             tmp.add(item.name);
           });
@@ -242,8 +286,9 @@ class PickerEntryPage extends StatelessWidget {
     );
   }
 
-  void _showRangePicker1(BuildContext context, List<BrnPickerEntity> _selectionData) {
-    _selectionData?.forEach((f) => f.configChild());
+  void _showRangePicker1(
+      BuildContext context, List<BrnPickerEntity> _selectionData) {
+    _selectionData.forEach((f) => f.configChild());
     String titleName = "测试标题";
     showModalBottomSheet(
       context: context,
@@ -253,11 +298,11 @@ class PickerEntryPage extends StatelessWidget {
           pickerTitleConfig: BrnPickerTitleConfig(titleContent: titleName),
           entity: _selectionData[3],
           defaultFocusedIndexes: [0, -1, -1],
-          onConfirm: (Map<String, List<BrnPickerEntity>> result, int firstIndex,
-              int secondIndex, int thirdIndex) {
-            List<String> pickResult = List();
+          onConfirm: (Map<String, List<BrnPickerEntity>> result,
+              int? firstIndex, int? secondIndex, int? thirdIndex) {
+            List<String> pickResult = [];
             result.forEach((key, val) {
-              List<String> tmp = List();
+              List<String> tmp = [];
               val.forEach((item) {
                 tmp.add(item.name);
               });
@@ -291,7 +336,7 @@ class PickerEntryPage extends StatelessWidget {
       '可爱多池',
     ];
 
-    List<BrnTagItemBean> items = List();
+    List<BrnTagItemBean> items = [];
     for (int i = 0; i < tags.length; i++) {
       String it = tags[i];
       BrnTagItemBean item = BrnTagItemBean(name: it, code: it, index: i);
@@ -348,10 +393,11 @@ class PickerEntryPage extends StatelessWidget {
       '我是可选择的标签1',
     ];
 
-    List<BrnTagInputItemBean> items = List();
+    List<BrnTagInputItemBean> items = [];
     for (int i = 0; i < tags.length; i++) {
       String it = tags[i];
-      BrnTagInputItemBean item = BrnTagInputItemBean(name: it, index: i, needExplane: (i % 2 == 0));
+      BrnTagInputItemBean item =
+          BrnTagInputItemBean(name: it, index: i, needExpend: (i % 2 == 0));
       items.add(item);
     }
 
@@ -369,8 +415,8 @@ class PickerEntryPage extends StatelessWidget {
                 tagItemSource: items,
                 tagTitleFontSize: 12,
                 tagTitleColor: Color(0xff222222),
-                tagBackgroudColor: Color(0xffF8F8F8),
-                selectedTagBackgroudColor: Color(0x140984F9),
+                tagBackgroundColor: Color(0xffF8F8F8),
+                selectedTagBackgroundColor: Color(0x140984F9),
                 selectedTagTitleColor: Color(0xFF0984F9),
               ),
               onTagValueGetter: (choice) {

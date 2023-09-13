@@ -1,18 +1,22 @@
+
+
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 
 class SelectionViewMultiListExamplePage extends StatefulWidget {
   final String _title;
-  final List<BrnSelectionEntity> _filterData;
+  final List<BrnSelectionEntity>? _filterData;
 
   SelectionViewMultiListExamplePage(this._title, this._filterData);
 
   @override
-  _SelectionViewExamplePageState createState() => _SelectionViewExamplePageState();
+  _SelectionViewExamplePageState createState() =>
+      _SelectionViewExamplePageState();
 }
 
-class _SelectionViewExamplePageState extends State<SelectionViewMultiListExamplePage> {
-  List<BrnSelectionEntity> items;
+class _SelectionViewExamplePageState
+    extends State<SelectionViewMultiListExamplePage> {
+  List<BrnSelectionEntity>? items;
 
   @override
   void initState() {
@@ -26,7 +30,7 @@ class _SelectionViewExamplePageState extends State<SelectionViewMultiListExample
         body: Column(
           children: <Widget>[
             BrnSelectionView(
-              originalSelectionData: widget._filterData,
+              originalSelectionData: widget._filterData!,
               onSelectionChanged: (int menuIndex,
                   Map<String, String> filterParams,
                   Map<String, String> customParams,

@@ -1,23 +1,32 @@
 import 'package:bruno/src/components/selectcity/brn_az_common.dart';
 
+/// 城市选择数据类
 class BrnSelectCityModel extends ISuspensionBean {
-  String name;
-  String tagIndex;
-  String namePinyin;
-  String tag;
-  String cityCode;
+
+  /// 城市名称
+  String name = "";
+
+  /// 城市名称前这是的标记符号
+  String tagIndex = "";
+
+  /// 拼音
+  String? namePinyin;
+
+  /// 城市 name 对应的锚点 tag
+  String tag = "";
+
+  /// 城市编码
+  String cityCode = "";
 
   BrnSelectCityModel({
-    this.name,
-    this.tagIndex,
+    required this.name,
+    this.tagIndex = "",
     this.namePinyin,
-    this.tag,
-    this.cityCode,
+    this.tag = "",
+    this.cityCode = "",
   });
 
-  BrnSelectCityModel.fromJson(Map<String, dynamic> json)
-      : name = json['name'] == null ? "" : json['name'],
-        cityCode = json['cityCode'] == null ? "" : json['cityCode'];
+  BrnSelectCityModel.fromJson(Map<String, dynamic> json);
 
   Map<String, dynamic> toJson() => {
         'name': name,

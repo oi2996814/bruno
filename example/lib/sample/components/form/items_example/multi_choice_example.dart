@@ -1,3 +1,5 @@
+
+
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 
@@ -40,9 +42,10 @@ class MultiChoiceInputExamplePage extends StatelessWidget {
               onRemoveTap: () {
                 BrnToast.show("点击触发onRemoveTap回调", context);
               },
-              onChanged: (List<String> oldValue, List<String> newValue) {
+              onChanged: (List<String> oldValue, List<String>? newValue) {
                 BrnToast.show(
-                    "点击触发onChanged回调${oldValue.length}_${newValue.length}_onChanged", context);
+                    "点击触发onChanged回调${oldValue.length}_${newValue!.length}_onChanged",
+                    context);
               },
             ),
             Container(
@@ -56,7 +59,7 @@ class MultiChoiceInputExamplePage extends StatelessWidget {
               ),
             ),
             BrnMultiChoiceInputFormItem(
-              prefixIconType: BrnPrefixIconType.TYPE_ADD,
+              prefixIconType: BrnPrefixIconType.add,
               isRequire: true,
               error: "必填项不能为空",
               title: "自然",
@@ -79,9 +82,10 @@ class MultiChoiceInputExamplePage extends StatelessWidget {
               onRemoveTap: () {
                 BrnToast.show("点击触发onRemoveTap回调", context);
               },
-              onChanged: (List<String> oldValue, List<String> newValue) {
+              onChanged: (List<String> oldValue, List<String>? newValue) {
                 BrnToast.show(
-                    "点击触发onChanged回调${oldValue.length}_${newValue.length}_onChanged", context);
+                    "点击触发onChanged回调${oldValue.length}_${newValue!.length}_onChanged",
+                    context);
               },
             ),
             Container(
@@ -95,7 +99,7 @@ class MultiChoiceInputExamplePage extends StatelessWidget {
               ),
             ),
             BrnMultiChoiceInputFormItem(
-              prefixIconType: BrnPrefixIconType.TYPE_REMOVE,
+              prefixIconType: BrnPrefixIconType.remove,
               isRequire: true,
               title: "自然到",
               subTitle: "这里是副标题",
@@ -119,7 +123,8 @@ class MultiChoiceInputExamplePage extends StatelessWidget {
               },
               onChanged: (List<String> oldValue, List<String> newValue) {
                 BrnToast.show(
-                    "点击触发onChanged回调${oldValue.length}_${newValue.length}_onChanged", context);
+                    "点击触发onChanged回调${oldValue.length}_${newValue.length}_onChanged",
+                    context);
               },
             ),
           ],

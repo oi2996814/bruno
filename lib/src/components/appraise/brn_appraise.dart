@@ -5,24 +5,10 @@ import 'package:bruno/src/components/appraise/brn_mulit_select_tags.dart';
 import 'package:bruno/src/components/button/brn_big_main_button.dart';
 import 'package:bruno/src/components/input/brn_input_text.dart';
 import 'package:bruno/src/components/picker/brn_tags_picker_config.dart';
+import 'package:bruno/src/components/appraise/brn_appraise_config.dart';
+import 'package:bruno/src/l10n/brn_intl.dart';
 import 'package:flutter/material.dart';
-
-/// 点击表情或者星星时的回调
-/// index 点击的表情或者星星的index
-typedef BrnAppraiseIconClick = void Function(int index);
-
-/// 点击tag的回调
-/// selectedTags 所有选中标签的集合
-typedef BrnAppraiseTagClick = void Function(List<String> selectedTags);
-
-/// 提交按钮点击事件回调
-/// index 选中的表情或者星星的index
-/// selectedTags 所有选中标签的集合
-/// input 自定义输入的内容
-typedef BrnAppraiseConfirmClick = void Function(int index, List<String> selectedTags, String input);
-
-/// 点击关闭的回掉
-typedef BrnAppraiseCloseClickCallBack = void Function(BuildContext context);
+import 'package:bruno/src/components/appraise/brn_appraise_interface.dart';
 
 /// /// /// /// /// /// /// /// /// /
 /// 描述: 评价组件
@@ -31,8 +17,6 @@ typedef BrnAppraiseCloseClickCallBack = void Function(BuildContext context);
 /// 3. 支持自定义title，标签等，在BrnAppraiseConfig里配置
 /// 4. 可以用在页面里面也可以使用在弹窗里面，使用在底部弹窗的参考[BrnAppraiseBottomPicker]
 /// /// /// /// /// /// /// /// /// /
-
-const BrnAppraiseConfig cConfig = BrnAppraiseConfig();
 
 class BrnAppraise extends StatefulWidget {
   /// 标题
@@ -53,33 +37,32 @@ class BrnAppraise extends StatefulWidget {
   /// 自定义文案
   /// 若评分组件为表情，则list长度为5，不足5个时请在对应位置补空字符串
   /// 若评分组件为星星，则list长度不能比count小
-  final List<String> iconDescriptions;
+  final List<String>? iconDescriptions;
 
   /// 标签
-  final List<String> tags;
+  final List<String>? tags;
 
   ///输入框允许提示文案
   final String inputHintText;
 
   /// 提交按钮的点击回调
-  final BrnAppraiseConfirmClick onConfirm;
+  final BrnAppraiseConfirmClick? onConfirm;
 
   /// 评价组件的配置项
   final BrnAppraiseConfig config;
 
-  /// 评价组建每个评分对应的默认文案
-  static const List<String> _defaultIconDescriptions = ['不好', '还行', '满意', '很棒', '超惊喜'];
-
-  BrnAppraise({
-    this.title,
-    this.headerType = BrnAppraiseHeaderType.spaceBetween,
-    this.type = BrnAppraiseType.Star,
-    this.iconDescriptions = _defaultIconDescriptions,
-    this.tags,
-    this.inputHintText,
-    this.onConfirm,
-    this.config = cConfig,
-  });
+  /// create BrnAppraise
+  BrnAppraise(
+      {Key? key,
+      this.title = '',
+      this.headerType = BrnAppraiseHeaderType.spaceBetween,
+      this.type = BrnAppraiseType.star,
+      this.iconDescriptions,
+      this.tags,
+      this.inputHintText = '',
+      this.onConfirm,
+      this.config = const BrnAppraiseConfig()})
+      : super(key: key);
 
   @override
   _BrnAppraiseState createState() => _BrnAppraiseState();
@@ -87,19 +70,19 @@ class BrnAppraise extends StatefulWidget {
 
 class _BrnAppraiseState extends State<BrnAppraise> {
   int _appraiseIndex = -1;
-  bool _enable;
-  String _inputText;
-  List<String> _selectedTag;
+  bool? _enable;
+  String? _inputText;
+  List<String> _selectedTag = [];
 
   @override
   void initState() {
-    _enable = widget.config?.isConfirmButtonEnabled;
+    _enable = widget.config.isConfirmButtonEnabled;
     super.initState();
   }
 
   @override
   void didUpdateWidget(BrnAppraise oldWidget) {
-    _enable = widget.config?.isConfirmButtonEnabled;
+    _enable = widget.config.isConfirmButtonEnabled;
     super.didUpdateWidget(oldWidget);
   }
 
@@ -137,45 +120,46 @@ class _BrnAppraiseState extends State<BrnAppraise> {
 
   /// header
   Widget _headerArea(BuildContext context) {
-    EdgeInsets defaultPadding = (widget.headerType == BrnAppraiseHeaderType.center)
-        ? EdgeInsets.only(top: 20, bottom: 20)
-        : EdgeInsets.only(left: 20, top: 16, right: 16, bottom: 20);
+    EdgeInsets defaultPadding =
+        (widget.headerType == BrnAppraiseHeaderType.center)
+            ? EdgeInsets.only(top: 20, bottom: 20)
+            : EdgeInsets.only(left: 20, top: 16, right: 16, bottom: 20);
     return BrnAppraiseHeader(
-      showHeader: widget.config?.showHeader ?? true,
-      headerType: widget.headerType ?? BrnAppraiseHeaderType.spaceBetween,
-      title: widget.title ?? '',
-      maxLines: widget.config?.titleMaxLines ?? 1,
-      headPadding: widget.config?.headerPadding ?? defaultPadding,
-      cancelCallBack: widget.config?.onCancel,
+      showHeader: widget.config.showHeader,
+      headerType: widget.headerType,
+      title: widget.title,
+      maxLines: widget.config.titleMaxLines,
+      headPadding: widget.config.headerPadding ?? defaultPadding,
+      cancelCallBack: widget.config.onCancel,
     );
   }
 
   /// 获取评分组件
   Widget _getIconWidget() {
-    if (widget.type == BrnAppraiseType.Emoji) {
+    if (widget.type == BrnAppraiseType.emoji) {
       return BrnAppraiseEmojiListView(
-        indexes: widget.config?.indexes,
-        titles: widget.iconDescriptions,
+        indexes: widget.config.indexes,
+        titles: widget.iconDescriptions ?? BrnIntl.of(context).localizedResource.appriseLevel,
         onTap: (index) {
           setState(() {
             _appraiseIndex = index;
           });
-          if (widget.config?.iconClickCallback != null) {
-            widget.config.iconClickCallback(index);
+          if (widget.config.iconClickCallback != null) {
+            widget.config.iconClickCallback!(index);
           }
         },
       );
     } else {
       return BrnAppraiseStarListView(
-        count: widget.config?.count ?? 5,
-        titles: widget.iconDescriptions,
-        hint: widget.config?.starAppraiseHint,
+        count: widget.config.count,
+        titles: widget.iconDescriptions ?? BrnIntl.of(context).localizedResource.appriseLevel,
+        hint: widget.config.starAppraiseHint,
         onTap: (index) {
           setState(() {
             _appraiseIndex = index;
           });
-          if (widget.config?.iconClickCallback != null) {
-            widget.config.iconClickCallback(index);
+          if (widget.config.iconClickCallback != null) {
+            widget.config.iconClickCallback!(index);
           }
         },
       );
@@ -185,7 +169,7 @@ class _BrnAppraiseState extends State<BrnAppraise> {
   /// 标签
   Widget _getTags() {
     if (widget.tags?.isEmpty ?? true) {
-      return Container();
+      return const SizedBox.shrink();
     }
     return Padding(
       padding: EdgeInsets.only(top: 24),
@@ -193,18 +177,18 @@ class _BrnAppraiseState extends State<BrnAppraise> {
         padding: EdgeInsets.all(0),
         physics: NeverScrollableScrollPhysics(),
         tagPickerBean: BrnTagsPickerConfig(
-          tagItemSource: string2Tag(widget.tags),
+          tagItemSource: _string2Tag(widget.tags),
         ),
         tagText: (choice) {
           return choice.name;
         },
         // tagStyle: BrnMultiSelectStyle.auto,
-        multiSelect: widget.config?.multiSelect ?? true,
-        brnCrossAxisCount: widget.config?.tagCountEachRow ?? 2,
+        multiSelect: widget.config.multiSelect,
+        brnCrossAxisCount: widget.config.tagCountEachRow,
         selectedTagsCallback: (list) {
-          _selectedTag = tag2String(list);
-          if (widget.config?.tagSelectCallback != null) {
-            widget.config.tagSelectCallback(_selectedTag);
+          _selectedTag = _tag2String(list);
+          if (widget.config.tagSelectCallback != null) {
+            widget.config.tagSelectCallback!(_selectedTag);
           }
         },
       ),
@@ -213,42 +197,43 @@ class _BrnAppraiseState extends State<BrnAppraise> {
 
   /// 输入框
   Widget _inputArea() {
-    if (widget.config?.showTextInput ?? true) {
+    if (widget.config.showTextInput) {
       return Padding(
         padding: EdgeInsets.only(top: 24),
         child: BrnInputText(
-          maxLength: widget.config?.maxLength ?? 100,
+          maxLength: widget.config.maxLength,
           bgColor: Color(0xfff8f8f8),
-          hint: widget.inputHintText ?? '',
-          textString: _inputText ?? '',
-          maxHeight: widget.config?.inputMaxHeight ?? 120,
+          hint: widget.inputHintText,
+          textString: (_inputText ?? widget.config.inputDefaultText) ?? '',
+          maxHeight: widget.config.inputMaxHeight,
           minHeight: 40,
-          maxHintLines: widget.config?.maxHintLines ?? 1,
+          maxHintLines: widget.config.maxHintLines,
           padding: EdgeInsets.all(12),
           onTextChange: (input) {
             _inputText = input;
-            if (widget.config?.inputTextChangeCallback != null) {
-              widget.config.inputTextChangeCallback(input);
+            if (widget.config.inputTextChangeCallback != null) {
+              widget.config.inputTextChangeCallback!(input);
             }
           },
         ),
       );
     }
-    return Container();
+    return const SizedBox.shrink();
   }
 
   /// 提交按钮
   Widget _confirmButton() {
-    if (widget.config?.showConfirmButton ?? true) {
+    if (widget.config.showConfirmButton) {
       return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(vertical: 16),
         child: BrnBigMainButton(
-          title: widget.config?.confirmButtonText ?? '提交',
+          title: widget.config.confirmButtonText ?? BrnIntl.of(context).localizedResource.submit,
           isEnable: _enable ?? _appraiseIndex != -1,
           onTap: () {
             if (_enable ?? _appraiseIndex != -1) {
               if (widget.onConfirm != null) {
-                widget.onConfirm(_appraiseIndex, _selectedTag, _inputText);
+                widget.onConfirm!(
+                    _appraiseIndex, _selectedTag, _inputText ?? '');
               }
             }
           },
@@ -256,118 +241,24 @@ class _BrnAppraiseState extends State<BrnAppraise> {
       );
     }
 
-    return Container();
+    return const SizedBox.shrink();
   }
 
-  List<BrnTagItemBean> string2Tag(List<String> tags) {
-    List<BrnTagItemBean> items = List();
+  List<BrnTagItemBean> _string2Tag(List<String>? tags) {
+    List<BrnTagItemBean> items = [];
     if (tags?.isNotEmpty ?? false) {
-      for (int i = 0; i < tags.length; i++) {
+      for (int i = 0; i < tags!.length; i++) {
         items.add(BrnTagItemBean(name: tags[i], code: tags[i], index: i));
       }
     }
     return items;
   }
 
-  List<String> tag2String(List<BrnTagItemBean> tags) {
-    List<String> result = List();
-    tags?.forEach((item) {
+  List<String> _tag2String(List<BrnTagItemBean> tags) {
+    List<String> result = [];
+    tags.forEach((item) {
       result.add(item.name);
     });
     return result;
   }
-}
-
-class BrnAppraiseConfig {
-  /// 是否显示标题和关闭
-  final bool showHeader;
-
-  /// 标题的padding
-  final EdgeInsets headerPadding;
-
-  /// 标题的最大行数
-  final int titleMaxLines;
-
-  /// 取消的回调
-  final BrnAppraiseCloseClickCallBack onCancel;
-
-  /// 所需表情包的index列表，index最大值为4
-  final List<int> indexes;
-
-  /// 展示的星星的数目
-  final int count;
-
-  /// 展示星星时的默认提示
-  final String starAppraiseHint;
-
-  /// 标签是否支持多选，默认为 true
-  final bool multiSelect;
-
-  /// 每行能显示的tag数目，默认为 2
-  final int tagCountEachRow;
-
-  ///是否显示输入框，默认为 true
-  final bool showTextInput;
-
-  ///输入框允许输入的最大长度，默认为 100
-  final int maxLength;
-
-  ///提示文案的最大行数，默认为1
-  final int maxHintLines;
-
-  /// 输入框默认输入文案
-  final String inputDefaultText;
-
-  /// 输入框的最大高度，默认为 120
-  final double inputMaxHeight;
-
-  /// 是否显示确认按钮
-  final bool showConfirmButton;
-
-  /// 确认按钮的文案
-  final String confirmButtonText;
-
-  /// 外部控制提交button的enable状态,null有效，不设置默认值
-  final bool isConfirmButtonEnabled;
-
-  /// 点击icon的回调
-  final BrnAppraiseIconClick iconClickCallback;
-
-  /// 输入框改变的回调
-  final BrnInputTextChangeCallback inputTextChangeCallback;
-
-  /// 选择标签的回调
-  final BrnAppraiseTagClick tagSelectCallback;
-
-  const BrnAppraiseConfig({
-    this.showHeader = true,
-    this.headerPadding,
-    this.titleMaxLines = 1,
-    this.onCancel,
-    this.indexes = const [0, 1, 2, 3, 4],
-    this.count = 5,
-    this.starAppraiseHint = '',
-    this.multiSelect = true,
-    this.tagCountEachRow = 2,
-    this.showTextInput = true,
-    this.maxLength = 100,
-    this.maxHintLines = 1,
-    this.inputDefaultText,
-    this.inputMaxHeight = 120,
-    this.showConfirmButton = true,
-    this.confirmButtonText = '提交',
-    this.isConfirmButtonEnabled,
-    this.iconClickCallback,
-    this.inputTextChangeCallback,
-    this.tagSelectCallback,
-  });
-}
-
-/// 评价组件类型
-enum BrnAppraiseType {
-  /// 表情包评价组件
-  Emoji,
-
-  /// 星星评价组件
-  Star,
 }

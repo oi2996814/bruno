@@ -1,9 +1,12 @@
+
+
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 
 class BrnTextRIchContentExample extends StatefulWidget {
   @override
-  _BrnTextRIchContentExampleState createState() => _BrnTextRIchContentExampleState();
+  _BrnTextRIchContentExampleState createState() =>
+      _BrnTextRIchContentExampleState();
 }
 
 class _BrnTextRIchContentExampleState extends State<BrnTextRIchContentExample> {
@@ -21,7 +24,10 @@ class _BrnTextRIchContentExampleState extends State<BrnTextRIchContentExample> {
           children: <Widget>[
             Text(
               '规则',
-              style: TextStyle(color: Color(0xFF222222), fontSize: 28, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: Color(0xFF222222),
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold),
             ),
             BrnBubbleText(
               maxLines: 4,
@@ -84,7 +90,8 @@ class _BrnTextRIchContentExampleState extends State<BrnTextRIchContentExample> {
               rowSpace: 10,
               pairInfoList: <BrnRichGridInfo>[
                 BrnRichGridInfo("名称名称：", null),
-                BrnRichGridInfo("名称名称名称名称名称名称名称名称名称：", '内容内容内容内容内容内容内容内容内容内容内容'),
+                BrnRichGridInfo(
+                    "名称名称名称名称名称名称名称名称名称：", '内容内容内容内容内容内容内容内容内容内容内容'),
                 BrnRichGridInfo("名称：", '内容内容'),
                 BrnRichGridInfo("名称：", ''),
               ],
@@ -102,7 +109,8 @@ class _BrnTextRIchContentExampleState extends State<BrnTextRIchContentExample> {
                 rowSpace: 10,
                 pairInfoList: <BrnRichGridInfo>[
                   BrnRichGridInfo("名称名称：", null),
-                  BrnRichGridInfo("名称名称名称名称名称名称名称名称名称：", '内容内容内容内容内容内容内容内容内容内容内容'),
+                  BrnRichGridInfo(
+                      "名称名称名称名称名称名称名称名称名称：", '内容内容内容内容内容内容内容内容内容内容内容'),
                   BrnRichGridInfo("名称：", '内容内容'),
                   BrnRichGridInfo("名称：", ''),
                 ],
@@ -123,7 +131,8 @@ class _BrnTextRIchContentExampleState extends State<BrnTextRIchContentExample> {
                     rowSpace: 10,
                     pairInfoList: <BrnRichGridInfo>[
                       BrnRichGridInfo("名称名称：", null),
-                      BrnRichGridInfo("名称名称名称名称名称名称名称名称名称：", '内容内容内容内容内容内容内容内容内容内容内容'),
+                      BrnRichGridInfo(
+                          "名称名称名称名称名称名称名称名称名称：", '内容内容内容内容内容内容内容内容内容内容内容'),
                       BrnRichGridInfo("名称：", '内容内容'),
                       BrnRichGridInfo("名称：", ''),
                     ],
@@ -144,7 +153,8 @@ class _BrnTextRIchContentExampleState extends State<BrnTextRIchContentExample> {
                   rowSpace: 10,
                   pairInfoList: <BrnRichGridInfo>[
                     BrnRichGridInfo("名称名称：", null),
-                    BrnRichGridInfo("名称名称名称名称名称名称名称名称名称：", '内容内容内容内容内容内容内容内容内容内容内容'),
+                    BrnRichGridInfo(
+                        "名称名称名称名称名称名称名称名称名称：", '内容内容内容内容内容内容内容内容内容内容内容'),
                     BrnRichGridInfo("名称：", '内容内容'),
                     BrnRichGridInfo("名称：", ''),
                   ],
@@ -167,14 +177,17 @@ class _BrnTextRIchContentExampleState extends State<BrnTextRIchContentExample> {
               child: Container(
                 padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                    color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(12.0))),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(12.0))),
                 child: Column(
                   children: <Widget>[
                     BrnPairInfoTable(
                       children: <BrnInfoModal>[
-                        BrnInfoModal(keyPart: "名称：", valuePart: "加粗的内容，文字样式可配置"),
+                        BrnInfoModal(
+                            keyPart: "名称：", valuePart: "加粗的内容，文字样式可配置"),
                         BrnInfoModal(keyPart: "名称名：", valuePart: "没加粗的内容"),
-                        BrnInfoModal(keyPart: "名称名称名：", valuePart: "内容内容内容内容内容"),
+                        BrnInfoModal(
+                            keyPart: "名称名称名：", valuePart: "内容内容内容内容内容"),
                         BrnInfoModal(
                           keyPart: "名称名称名称名称：",
                           valuePart: "内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容",
@@ -187,7 +200,9 @@ class _BrnTextRIchContentExampleState extends State<BrnTextRIchContentExample> {
                     BrnRichInfoGrid(
                       themeData: BrnPairRichInfoGridConfig(
                           keyTextStyle: BrnTextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w400, color: Color(0xff999999)),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xff999999)),
                           valueTextStyle: BrnTextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
@@ -196,7 +211,8 @@ class _BrnTextRIchContentExampleState extends State<BrnTextRIchContentExample> {
                       rowSpace: 10,
                       pairInfoList: <BrnRichGridInfo>[
                         BrnRichGridInfo("正常的名称：", '正常的内容'),
-                        BrnRichGridInfo("名称名称名称名称名称名称名称名称名称：", '内容内容内容内容内容内容内容内容内容内容内容'),
+                        BrnRichGridInfo(
+                            "名称名称名称名称名称名称名称名称名称：", '内容内容内容内容内容内容内容内容内容内容内容'),
                         BrnRichGridInfo("名称：", '内容内容内容内容内容内容内容内容内容内容内容内容'),
                         BrnRichGridInfo("名称：", ''),
                       ],
@@ -208,7 +224,8 @@ class _BrnTextRIchContentExampleState extends State<BrnTextRIchContentExample> {
                       rowSpace: 10,
                       pairInfoList: <BrnRichGridInfo>[
                         BrnRichGridInfo("加粗的名称：", '加粗的内容'),
-                        BrnRichGridInfo("名称名称名称名称名称名称名称名称名称：", '内容内容内容内容内容内容内容内容内容内容内容'),
+                        BrnRichGridInfo(
+                            "名称名称名称名称名称名称名称名称名称：", '内容内容内容内容内容内容内容内容内容内容内容'),
                         BrnRichGridInfo("名称：", '内容内容内容内容内容内容内容内容内容内容内容内容'),
                         BrnRichGridInfo("名称：", ''),
                       ],
